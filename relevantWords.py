@@ -61,79 +61,95 @@ val_list = list(n_grams_freq.values())
 """ For n == 2 """ ## then we can do a for with n cycle for this (for all n's)
 
 # get size of n-gram
-e1 = np.size(key_list[0])
+gram_2size = np.size(key_list[0])
 
 # get sentence of n-gram 
-e1 = key_list[0]
+gram_2 = key_list[0]
 
 # get singular words
-eheh = e1[0]
-eheh2 = e1[1]
+firstW = gram_2[0]
+secondW = gram_2[1]
 
 # get singular words frequency in text
 
-t1 = word_freq[eheh]
-t2 = word_freq[eheh2]
+
+""" Calculate omega n - 1 """
+
+# For the 2 gram is just the single words frequency (we would add these values to the omega set - t1 and t2)
+
+#omegaN_minus1 = []
+
+# here we would put a for to append this to the omegaN_minus list
+firstWfreq = word_freq[firstW]
+#omegaN_minus1.append(firstWfreq)
+secondWfreq = word_freq[secondW]
+#omegaN_minus1.append(secondWfreq)
+
+#omegaN_plus1 = []
 
 # get 2-gram frequency
-e1_together = val_list[0]
+gram_2freq = val_list[0]
 
 # get 2-gram glue
-glue_2 = (e1_together ** 2)  / (t1 * t2)
+glue_2 = (gram_2freq ** 2)  / (firstWfreq  * secondWfreq)
+
+
+
 
 
 """ For n > 2, in this case n == 3 """
 
-# get size of n-gram
-e13 = np.size(key_list[6000])
+# get size of n-gram (this is just informative)
+gram_3size = np.size(key_list[6000])
 
 # get sentence of n-gram 
-e13 = key_list[6000]
+gram_3 = key_list[6000]
 
 # get 3-gram frequency
-e13_together = val_list[6000]
+gram_3freq = val_list[6000]
 
-# get singular words
-
+# get singular words of the 3-gram
 singular_words = []
+
 word_frequencies = []
+
 divisions = []
 
 #division n-grams frequency
-ti = []
+frequencySubGrams = []
 
-for i in range(len(e13)):
-    singular_words.append(e13[i])  # this is not needed, maybe use directly e13 or other vector name
+for i in range(len(gram_3)):
+    singular_words.append(gram_3[i])  # this is not needed, maybe use directly e13 or other vector name
 # get singular words frequency in text
     word_frequencies.append(word_freq[singular_words[i]])    
 #get n-grams division frequencies
-    divisions_x = list(e13)
-    divisions_y = list(e13)
+    divisions_x = list(gram_3)
+    divisions_y = list(gram_3)
     # is always less 1 than the size of the n-gram  
     ## here before we can put an if instead of a for? if has not got to the last element of the array continue
-    if i < len(e13) - 1:
+    if i < len(gram_3) - 1:
         print("\t\t\n New Division \t\t")
-        x = divisions_x[: - (len(e13) - 1 - i)]
-        y = divisions_y[-(len(e13) - 1 - i):]
+        x = divisions_x[: - (len(gram_3) - 1 - i)]
+        y = divisions_y[-(len(gram_3) - 1 - i):]
         print('x = ' + str(x))
         print('y = ' + str(y)+ '\n')
         for j in x, y: 
             print('j = ' + str(j))
             if(len(j) == 1): #index 863 'The', 'beginning'
                 value = word_freq[j[0]]
-                ti.append(value)
+                frequencySubGrams.append(value)
                 print('len 1 \t freq =  ' + str(value) + '\n')
             else:
                 value = val_list[key_list.index(tuple(j))]
                 print('len > 1 \t freq = ' + str(value) + '\n')
-                ti.append(value)
+                frequencySubGrams.append(value)
         
 
-tete = np.asarray(ti) / len(text_list)
-mult = len(tete) / 2
+probSubGrams = np.asarray(frequencySubGrams) / len(text_list)
+#mult = len(tete) / 2
     
 # Ta a funcionar fixolas
-yoyo = sum(tete[x] * tete[y] for x,y in zip(range(0,len(tete),2), range(1,len(tete),2) ))
+probNGram = sum(probSubGrams[x] * probSubGrams[y] for x,y in zip(range(0,len(probSubGrams),2), range(1,len(probSubGrams),2) ))
 
+glue_3 = ((gram_3freq / len(text_list)) ** 2 ) /  (  (1 / (len(gram_3) - 1) ) * (probNGram) )
 
-glue_3 = ((e13_together/ len(text_list)) ** 2 ) /  (  (1 / (len(e13) - 1) ) * (yoyo) )
