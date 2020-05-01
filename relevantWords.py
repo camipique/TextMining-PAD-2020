@@ -200,6 +200,4 @@ for i in range(1, 7):
     for n_gram in n_grams[i]:
         glues[i][n_gram] = glue(n_gram)
 
-        
-
 
