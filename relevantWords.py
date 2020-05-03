@@ -48,106 +48,13 @@ for file_name in os.listdir(CORPUS_FOLDER_PATH):
     
     with open(CORPUS_FOLDER_PATH + file_name, "r", encoding="utf8") as f:
         text = f.read()
-        #print(len(text))
+
         # find the regex defined in text
         text_list = re.findall(regex, text)
          
         text_split_str += " ".join(text_list)
         text_split_list.extend(text_list)
 
-
-# We can use the text_split_list instead of transforming text_split_str as a list
-#word_freq = FreqDist(text_split_list)
-#
-#n_grams = list(everygrams(text_split_list,min_len=2, max_len=7))
-#
-#n_grams_freq = dict(FreqDist(n_grams))
-
-
-#key_list = list(n_grams_freq.keys()) 
-#val_list = list(n_grams_freq.values())
-#
-#""" Calculate glues """
-#
-#""" For n == 2 """ ## then we can do a for with n cycle for this (for all n's)
-#
-## get size of n-gram
-#e1 = np.size(key_list[0])
-#
-## get sentence of n-gram 
-#e1 = key_list[0]
-#
-## get singular words
-#eheh = e1[0]
-#eheh2 = e1[1]
-#
-## get singular words frequency in text
-#
-#t1 = word_freq[eheh]
-#t2 = word_freq[eheh2]
-#
-## get 2-gram frequency
-#e1_together = val_list[0]
-#
-## get 2-gram glue
-#glue_2 = (e1_together ** 2)  / (t1 * t2)
-#
-#
-#""" For n > 2, in this case n == 3 """
-#
-## get size of n-gram
-#e13 = np.size(key_list[6000])
-#
-## get sentence of n-gram 
-#e13 = key_list[6000]
-#
-## get 3-gram frequency
-#e13_together = val_list[6000]
-#
-## get singular words
-#
-#singular_words = []
-#word_frequencies = []
-#divisions = []
-#
-##division n-grams frequency
-#ti = []
-#
-#for i in range(len(e13)):
-#    singular_words.append(e13[i])  # this is not needed, maybe use directly e13 or other vector name
-## get singular words frequency in text
-#    word_frequencies.append(word_freq[singular_words[i]])    
-##get n-grams division frequencies
-#    divisions_x = list(e13)
-#    divisions_y = list(e13)
-#    # is always less 1 than the size of the n-gram  
-#    ## here before we can put an if instead of a for? if has not got to the last element of the array continue
-#    if i < len(e13) - 1:
-#        print("\t\t\n New Division \t\t")
-#        x = divisions_x[: - (len(e13) - 1 - i)]
-#        y = divisions_y[-(len(e13) - 1 - i):]
-#        print('x = ' + str(x))
-#        print('y = ' + str(y)+ '\n')
-#        for j in x, y: 
-#            print('j = ' + str(j))
-#            if(len(j) == 1): #index 863 'The', 'beginning'
-#                value = word_freq[j[0]]
-#                ti.append(value)
-#                print('len 1 \t freq =  ' + str(value) + '\n')
-#            else:
-#                value = val_list[key_list.index(tuple(j))]
-#                print('len > 1 \t freq = ' + str(value) + '\n')
-#                ti.append(value)
-#        
-#
-#tete = np.asarray(ti) / len(text_list)
-#mult = len(tete) / 2
-#    
-## Ta a funcionar fixolas
-#yoyo = sum(tete[x] * tete[y] for x,y in zip(range(0,len(tete),2), range(1,len(tete),2) ))
-#
-#
-#glue_3 = ((e13_together/ len(text_list)) ** 2 ) /  (  (1 / (len(e13) - 1) ) * (yoyo) )
 
 words, bigrams, trigrams, fourgrams, fivegrams, sixgrams, sevengrams = find_n_grams(text_split_list)
 
@@ -223,7 +130,7 @@ def glue(n_gram):
     
     return n_gram_prob(n_gram) ** 2 / f # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
     
-mwu = []
+mwu = set([])
 # main method
 
 for i in range(6, 0, -1): # starts in 1 till 6 (inclusive)
@@ -263,13 +170,13 @@ for i in range(1, 6):
             
             if i == 1:
                 if n_gram_glue > max(omegaPlus1[i][n_gram]):
-                    mwu.append([n_gram_glue, " ".join(n_gram)])
+                    mwu.add((n_gram_glue, " ".join(n_gram)))
             else:
                 x = max(max(omegaMinus1[i-1][n_gram[1:]], omegaMinus1[i-1][n_gram[:i]]))
                 y = max(omegaPlus1[i][n_gram])
                 
                 if n_gram_glue > (x + y) / 2:
-                    mwu.append([n_gram_glue, " ".join(n_gram)])
+                    mwu.add((n_gram_glue, " ".join(n_gram)))
                 
             
             
