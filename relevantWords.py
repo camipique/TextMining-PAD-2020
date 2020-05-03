@@ -154,13 +154,7 @@ for i in range(6, 0, -1): # starts in 1 till 6 (inclusive)
         except KeyError:
             omegaPlus1[i-1][n_gram[:i]] = [glue(n_gram)]
              
-#        if n_grams_freq[i][n_gram] >= 2:
-#            
-#            if i == 1:
-#                if n_gram_glue > max(omegaPlus1[i][n_gram]):
-#                    mwu.append([n_gram_glue, " ".join(n_gram)])
-#            elif i != 0:
-#                pass
+
 
 for i in range(1, 6):
     for n_gram in n_grams[i]:
@@ -172,21 +166,16 @@ for i in range(1, 6):
                 if n_gram_glue > max(omegaPlus1[i][n_gram]):
                     mwu.add((n_gram_glue, " ".join(n_gram)))
             else:
-                x = max(max(omegaMinus1[i-1][n_gram[1:]], omegaMinus1[i-1][n_gram[:i]]))
+                x = max(omegaMinus1[i][n_gram])
                 y = max(omegaPlus1[i][n_gram])
                 
                 if n_gram_glue > (x + y) / 2:
                     mwu.add((n_gram_glue, " ".join(n_gram)))
                 
             
-            
-            
         
 with open("mwu.txt", "w", encoding="utf-8") as file:
     for relevant_expression in mwu:
         file.write(str(relevant_expression) + "\n")
 
-  #      omegaPlus1[i - 1][n_gram[:i]] = []
-      #  omegaPlus1[i - 1][n_gram[:i]].append(glue(n_gram))
         
-  
