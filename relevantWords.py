@@ -10,7 +10,7 @@ PAD Project - Text Mining
 
 import re, os
 from nltk import FreqDist
-from nltk.util import everygrams, ngrams
+from nltk.util import ngrams
 
 CORPUS_FOLDER_PATH = "corpus2mwTest/"
 
@@ -57,11 +57,11 @@ for file_name in os.listdir(CORPUS_FOLDER_PATH):
 
 
 # We can use the text_split_list instead of transforming text_split_str as a list
-word_freq = FreqDist(text_split_list)
-
-n_grams = list(everygrams(text_split_list,min_len=2, max_len=7))
-
-n_grams_freq = dict(FreqDist(n_grams))
+#word_freq = FreqDist(text_split_list)
+#
+#n_grams = list(everygrams(text_split_list,min_len=2, max_len=7))
+#
+#n_grams_freq = dict(FreqDist(n_grams))
 
 
 #key_list = list(n_grams_freq.keys()) 
@@ -223,33 +223,62 @@ def glue(n_gram):
     
     return n_gram_prob(n_gram) ** 2 / f # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
     
-
+mwu = []
 # main method
 
 for i in range(6, 0, -1): # starts in 1 till 6 (inclusive)
     for n_gram in n_grams[i]: # in dictionary entry, and inside that entry glues[i][ngram] calculate the glues
         
-        glues[i][n_gram] = glue(n_gram)
+        n_gram_glue = glues[i][n_gram] = glue(n_gram)
         
         omegaMinus1[i][n_gram] = [glue(n_gram[1:])]  
         omegaMinus1[i][n_gram].append( glue(n_gram[ :i]) )
         
-      #  omegaPlus1[i - 1][n_gram[1:]] = []  
-        #omegaPlus1[i - 1][n_gram[1:]].append(glue(n_gram))
         
         try: # n_gram[1:] in omegaPlus1[i-1]:
             omegaPlus1[i-1][n_gram[1:]].append(glue(n_gram))
-        
+
         except KeyError:
-             omegaPlus1[i-1][n_gram[1:]] = [glue(n_gram)]
+            omegaPlus1[i-1][n_gram[1:]] = [glue(n_gram)]
         
         try: # n_gram[:i] in omegaPlus1[i-1]:
             omegaPlus1[i-1][n_gram[:i]].append(glue(n_gram))
         
         except KeyError:
-             omegaPlus1[i-1][n_gram[:i]] = [glue(n_gram)]
+            omegaPlus1[i-1][n_gram[:i]] = [glue(n_gram)]
+             
+#        if n_grams_freq[i][n_gram] >= 2:
+#            
+#            if i == 1:
+#                if n_gram_glue > max(omegaPlus1[i][n_gram]):
+#                    mwu.append([n_gram_glue, " ".join(n_gram)])
+#            elif i != 0:
+#                pass
+
+for i in range(1, 6):
+    for n_gram in n_grams[i]:
         
+        if n_grams_freq[i][n_gram] >= 2:    
+            n_gram_glue = glues[i][n_gram]
+            
+            if i == 1:
+                if n_gram_glue > max(omegaPlus1[i][n_gram]):
+                    mwu.append([n_gram_glue, " ".join(n_gram)])
+            else:
+                x = max(max(omegaMinus1[i-1][n_gram[1:]], omegaMinus1[i-1][n_gram[:i]]))
+                y = max(omegaPlus1[i][n_gram])
+                
+                if n_gram_glue > (x + y) / 2:
+                    mwu.append([n_gram_glue, " ".join(n_gram)])
+                
+            
+            
+            
         
+with open("mwu.txt", "w", encoding="utf-8") as file:
+    for relevant_expression in mwu:
+        file.write(str(relevant_expression) + "\n")
+
   #      omegaPlus1[i - 1][n_gram[:i]] = []
       #  omegaPlus1[i - 1][n_gram[:i]].append(glue(n_gram))
         
