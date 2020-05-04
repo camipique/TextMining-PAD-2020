@@ -8,11 +8,11 @@ PAD Project - Text Mining
 
 # Part 1 - Extracting relevant words
 
-import re, os
+import re, os, math
 from nltk import FreqDist
 from nltk.util import ngrams
 
-CORPUS_FOLDER_PATH = "corpus2mwTest/"
+CORPUS_FOLDER_PATH = "corpus2mw/"
 
 def find_n_grams(text):
     words = list(ngrams(text, 1))
@@ -124,16 +124,43 @@ def glue(n_gram):
     for i in range(1, len(n_gram)): # starting in 1 because :1 goes till the start index, so starts in 0. i: starts in the index (1) till the index
         f += n_gram_prob( n_gram[:i] ) * n_gram_prob( n_gram[i:] )
 
+    f = f / ( len(n_gram) - 1 ) # formula of F 
+
+    return n_gram_prob(n_gram) ** 2 / f # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
+  
+def dice(n_gram):
+    
+    f = 0 #frequency
+
+    if len(n_gram) == 1:
+        return n_gram_prob(n_gram)
+
+    for i in range(1, len(n_gram)): # starting in 1 because :1 goes till the start index, so starts in 0. i: starts in the index (1) till the index
+        f += n_gram_prob( n_gram[:i] ) + n_gram_prob( n_gram[i:] )
+
+    f = f / ( len(n_gram) - 1 ) # formula of F 
+    
+    return n_gram_prob(n_gram) * 2 / f # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
+  
+def mi(n_gram):
+    
+    f = 0 #frequency
+
+    if len(n_gram) == 1:
+        return n_gram_prob(n_gram)
+
+    for i in range(1, len(n_gram)): # starting in 1 because :1 goes till the start index, so starts in 0. i: starts in the index (1) till the index
+        f += n_gram_prob( n_gram[:i] ) * n_gram_prob( n_gram[i:] )
 
     f = f / ( len(n_gram) - 1 ) # formula of F 
 
-    
-    return n_gram_prob(n_gram) ** 2 / f # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
-    
+    return math.log(n_gram_prob(n_gram) / f) # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
+
 mwu = set([])
 # main method
 
 for i in range(6, 0, -1): # starts in 1 till 6 (inclusive)
+    print(i)
     for n_gram in n_grams[i]: # in dictionary entry, and inside that entry glues[i][ngram] calculate the glues
         
         n_gram_glue = glues[i][n_gram] = glue(n_gram)
@@ -157,6 +184,7 @@ for i in range(6, 0, -1): # starts in 1 till 6 (inclusive)
 
 
 for i in range(1, 6):
+    print(i)
     for n_gram in n_grams[i]:
         
         if n_grams_freq[i][n_gram] >= 2:    
