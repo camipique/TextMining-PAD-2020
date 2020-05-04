@@ -156,6 +156,31 @@ def mi(n_gram):
 
     return math.log(n_gram_prob(n_gram) / f) # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
 
+def phi(n_gram):
+    n = len(n_grams_freq[0])
+    
+    avq = 0 
+    avd = 0
+
+    if len(n_gram) == 1:
+        return n_gram_prob(n_gram)
+
+    for i in range(1, len(n_gram)): # starting in 1 because :1 goes till the start index, so starts in 0. i: starts in the index (1) till the index
+        
+        a = n_gram_prob(n_gram[:i])
+        b = n_gram_prob(n_gram[i:])
+        
+        avq += a * b 
+        avd += a * b * (n - a) * (n - b)
+        
+
+    avq = avq / ( len(n_gram) - 1 )
+    avd = avd / ( len(n_gram) - 1 )
+
+    return (n * n_gram_prob(n_gram) - avq) ** 2 / avd # formula of glue of a n-gram with n > 2 (it can also apply to n = 2)
+
+
+
 mwu = set([])
 # main method
 
