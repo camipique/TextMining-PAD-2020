@@ -12,8 +12,8 @@ import re, os, math
 from nltk import FreqDist
 from nltk.util import ngrams
 
-CORPUS_FOLDER_PATH = "corpus2mw/"
-COHESION_MEASURE = "logLike" # change here to use a different cohesion measure
+CORPUS_FOLDER_PATH = "corpus2mwTest/"
+COHESION_MEASURE = "glue" # change here to use a different cohesion measure
 
 def find_n_grams(text):
     words = list(ngrams(text, 1))
