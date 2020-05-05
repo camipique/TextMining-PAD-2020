@@ -12,16 +12,23 @@ import re, os, math
 from nltk import FreqDist
 from nltk.util import ngrams
 
-CORPUS_FOLDER_PATH = "corpus2mwTest/"
-COHESION_MEASURE = "glue" # change here to use a different cohesion measure
+CORPUS_FOLDER_PATH = "corpus2mw/"
+COHESION_MEASURE = "phi" # change here to use a different cohesion measure
 
 def find_n_grams(text):
+    print("Calculating 1-grams")
     words = list(ngrams(text, 1))
+    print("Calculating 2-grams")
     bigrams = list(ngrams(text, 2))
+    print("Calculating 3-grams")
     trigrams = list(ngrams(text, 3))
+    print("Calculating 4-grams")
     fourgrams = list(ngrams(text, 4))
+    print("Calculating 5-grams")
     fivegrams = list(ngrams(text, 5))
+    print("Calculating 6-grams")
     sixgrams = list(ngrams(text, 6))
+    print("Calculating 7-grams")
     sevengrams = list(ngrams(text, 7))
 
     return words, bigrams, trigrams, fourgrams, fivegrams, sixgrams, sevengrams
@@ -81,60 +88,54 @@ def cohesion (n_gram, measure):
         right_subgram = n_gram_prob(n_gram[i:])
         
         if(not (measure == 'dice')):
+            
             if(measure == 'phi'):
-                
                 left_subgram = left_subgram * word_count
                 right_subgram = right_subgram * word_count
                 avq += left_subgram * right_subgram 
-                avd += (left_subgram * right_subgram) * (word_count - left_subgram) * (word_count - right_subgram)            
-                continue
-                
-            if(measure == 'logLike'):
-                
+                avd += (left_subgram * right_subgram) * (word_count - left_subgram) * (word_count - right_subgram)        
+            elif(measure == 'logLike'):
                 avx += word_count * left_subgram
-                avy += word_count * right_subgram               
-                continue
-        
+                avy += word_count * right_subgram            
             else:                    
                 f += left_subgram * right_subgram
-                continue
-        
+    
         else:
             f += word_count * ( left_subgram + right_subgram)
-
-    f = f / (  n_gramSize  - 1 ) # formula of F 
-    
-    avq = avq / (  n_gramSize  - 1 )
-    avd = avd / (  n_gramSize  - 1 )
-
-    avx = avx / (  n_gramSize  - 1 )
-    avy = avy / (  n_gramSize  - 1 )
  
     if(measure == 'phi'):
+        avq = avq / (  n_gramSize  - 1 )
+        avd = avd / (  n_gramSize  - 1 )
+        
         return avq, avd
     
     if(measure == 'logLike'):
+        avx = avx / (  n_gramSize  - 1 )
+        avy = avy / (  n_gramSize  - 1 )
+        
         return avx,avy
 
     if(measure == 'glue' or measure == 'dice' or measure == 'mi'):
+        f = f / (  n_gramSize  - 1 ) # formula of F 
+        
         return f
 
 def cohesion_measures(measureType, n_gram):
     if(measureType == 'glue'):
         return glue(n_gram)
-    if(measureType == 'dice'):
+    elif(measureType == 'dice'):
         return dice(n_gram)
-    if(measureType == 'mi'):
+    elif(measureType == 'mi'):
         return mi(n_gram)
-    if(measureType == 'phi'):
+    elif(measureType == 'phi'):
         return phi(n_gram)
-    if(measureType == 'logLike'):
+    elif(measureType == 'logLike'):
         return logLike(n_gram)
-    
-    return glue(n_gram) # glue is the default measure
+    else:
+        return glue(n_gram) # glue is the default measure
 
 def calculateOmegas():
-
+    print("Calculating omegas...\n")
     for i in range(6, 0, -1): # because there isn't any cohesion for zero
         for n_gram in n_grams[i]: # in dictionary entry, and inside that entry cohesions[i][ngram] calculate the cohesion of n_grams
             
@@ -168,6 +169,7 @@ def readCorpus():
     # [ ; : ! ? < > & ( )  \[  \]  \"  \. , = / \\ (to not interpret \ as an escaoe signal)]
     # Not adding spaces on ' and - when they are attached to words
     # And also not substituting isolated '’- with white spaces 
+    print("Reading corpus...\n")
     
     regex = re.compile("[\w'’-]+|[;:!?<>&\(\)\[\]\"\.,=/\\\^\$\*\+\|\{\}]|[\S'’-]+")
     
@@ -203,6 +205,7 @@ n_grams = {
         6: sevengrams
 }
 
+print("\nCalculating n-grams frequency\n")
 n_grams_freq = {
         0: FreqDist(words),
         1: FreqDist(bigrams),
@@ -251,6 +254,7 @@ mwu = set([])
 
 
 for i in range(1, 6):  # starts in 1 till 6 (inclusively)
+    print("Finding MWUs with {} terms".format(i))
     for n_gram in n_grams[i]:
         
         n_gram_cohesion = cohesions[i][n_gram]
