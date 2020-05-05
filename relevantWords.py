@@ -254,7 +254,7 @@ mwu = set([])
 
 
 for i in range(1, 6):  # starts in 1 till 6 (inclusively)
-    print("Finding MWUs with {} terms".format(i))
+    print("Finding MWUs with {} terms".format(i+1))
     for n_gram in n_grams[i]:
         
         n_gram_cohesion = cohesions[i][n_gram]
