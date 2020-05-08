@@ -234,10 +234,12 @@ with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and 
         
     file.write(str(mwu))
 
-test = sample(mwu, 200)
+# sort the relevant expressions found
+random_mwu = sample(mwu, 200)
 
-with open("200random-mwu.txt", "w+", encoding="utf-8") as file:
-    for i in test:
-        file.write(str(i) + "\n")
+# write the first 200 relevant expressions to calculate precision
+with open("200random-mwu.txt", "w", encoding="utf-8") as file:
+    for exp in random_mwu:
+        file.write(str(exp) + "\n")
 
 print("--- Program ended in %s seconds ---" % (time.time() - start_time))
