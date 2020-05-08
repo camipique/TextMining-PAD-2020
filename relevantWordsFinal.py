@@ -16,8 +16,8 @@ from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpus2mw/"
-COHESION_MEASURE = "glue" # change here to use a different cohesion measure
+CORPUS_FOLDER_PATH = "corpus4mw/"
+COHESION_MEASURE = "loglike" # change here to use a different cohesion measure
 
 
 def n_gram_prob(n_gram): # [dictionary entry][element inside the dictionary entry]
@@ -43,7 +43,7 @@ def log_l(p, k, m): # auxiliar function for logLike cohesion measure
         return k * math.log(p) + (m - k) * math.log(1-p)
 
 def logLike(n_gram):
-    left_subgram, right_subgram = cohesion(n_gram, 'logLike')
+    left_subgram, right_subgram = cohesion(n_gram, 'loglike')
     kf1 = word_count * n_gram_prob(n_gram)
     kf2 = left_subgram - kf1
     nf1 = right_subgram
@@ -82,7 +82,7 @@ def cohesion (n_gram, measure):
                 right_subgram = right_subgram * word_count
                 avq += left_subgram * right_subgram 
                 avd += (left_subgram * right_subgram) * (word_count - left_subgram) * (word_count - right_subgram)        
-            elif(measure == 'logLike'):
+            elif(measure == 'loglike'):
                 avx += word_count * left_subgram
                 avy += word_count * right_subgram            
             else:                    
@@ -97,7 +97,7 @@ def cohesion (n_gram, measure):
         
         return avq, avd
     
-    if(measure == 'logLike'):
+    if(measure == 'loglike'):
         avx = avx / (  n_gramSize  - 1 )
         avy = avy / (  n_gramSize  - 1 )
         
@@ -119,7 +119,7 @@ def cohesion_measures(measureType, n_gram):
         return mi(n_gram)
     elif(measureType == 'phi'):
         return phi(n_gram)
-    elif(measureType == 'logLike'):
+    elif(measureType == 'loglike'):
         return logLike(n_gram)
     else:
         return glue(n_gram) # glue is the default measure
@@ -183,10 +183,11 @@ getEntry = seq.get
 cohesion_gram = cohesion_measures 
 add = mwu.add
 
-with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and writting file, overwritting the file
+with open("{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w+", encoding="utf-8") as file: # w+ for both reading and writting file, overwritting the file
     for n_gramIndex in range(0, oneGram_Index):  
-   
+        
         n_gram = n_grams[n_gramIndex]
+        
         left_gram = n_gram[:len(n_gram) - 1]
         right_gram = n_gram[1:]
 
@@ -238,7 +239,7 @@ with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and 
 random_mwu = sample(mwu, 200)
 
 # write the first 200 relevant expressions to calculate precision
-with open("{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1]), "w", encoding="utf-8") as file:
+with open("{}-{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w", encoding="utf-8") as file:
     for exp in random_mwu:
         file.write(str(exp) + "\n")
 
