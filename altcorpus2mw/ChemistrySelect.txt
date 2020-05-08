@@ -1,0 +1,2 @@
+51	ChemistrySelect
+ChemistrySelect &&&&& Introduction &&&&& &&&&& &&&&& '''''ChemistrySelect ''''' is a peer-reviewed scientific journal that publishes articles on all areas of chemistry and adjacent fields. It is published by Wiley-VCH on behalf of ChemPubSoc Europe. The journal is indexed in Science Citation Index Expanded, and Scopus. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& External links &&&&& * &&&&& * First release notes &&&&& * ChemPubSoc Europe &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

@@ -1,0 +1,2 @@
+41	Companion_robot
+Companion robot &&&&& Introduction &&&&& A '''companion robot''' is a robot created for the purposes of creating real or apparent companionship for human beings. Target markets for companion robots include the elderly and single children. &&&&& &&&&& References &&&&& &&&&& &&&&& See also &&&&& * Loneliness &&&&& &&&&& &&&&& &&&&& &&&&& * Human-robot interaction &&&&& &&&&& &&&&& 

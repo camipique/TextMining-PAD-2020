@@ -1,0 +1,2 @@
+68	Data_plan
+Data plan &&&&& Introduction &&&&& &&&&& &&&&& '''Data plan''' refers to data quotas from a telecommunications or data hosting contract. Data plans are offered by internet service providers. These include mobile data plans, offered on cellular networks, from cellular telephony companies, and those from conventional fixed land line links, amongst other forms of offered data communications. Network data hosting servers also offer plans based on data served, such as for websites. &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

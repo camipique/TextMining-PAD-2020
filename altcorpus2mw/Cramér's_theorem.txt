@@ -1,0 +1,2 @@
+60	Cramér's_theorem
+Cramér's theorem &&&&& Introduction &&&&& '''Cramér's theorem''' may refer to &&&&& * Cramér’s decomposition theorem, a statement about the sum of normal distributed random variable &&&&& * Cramér's theorem (large deviations), a fundamental result in the theory of large deviations &&&&& * Cramer's theorem (algebraic curves), a result regarding the necessary number of points to determine a curve &&&&& &&&&& &&&&& 

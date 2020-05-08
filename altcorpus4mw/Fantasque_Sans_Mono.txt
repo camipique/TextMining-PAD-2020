@@ -1,0 +1,2 @@
+51	Fantasque_Sans_Mono
+Fantasque Sans Mono &&&&& Introduction &&&&& &&&&& &&&&& '''Fantasque Sans Mono''' is an open source (OFL-licensed) monospace typeface with a distinct slightly cursive look to it.  &&&&& &&&&& External links &&&&& * http://programmingfonts.org/post/107611110077/fantasque-sans-mono-a-programming-font &&&&& *https://github.com/belluzj/fantasque-sans  &&&&& *https://fontlibrary.org/en/font/fantasque-sans-mono. &&&&& &&&&& &&&&& &&&&& 

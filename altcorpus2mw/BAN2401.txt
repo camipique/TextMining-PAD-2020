@@ -1,0 +1,2 @@
+47	BAN2401
+BAN2401 &&&&& Introduction &&&&& &&&&& '''BAN2401''' is an experimental drug that is currently in clinical trials for the treatment of Alzheimer's disease. It is a humanized version of a mouse antibody mAb158 that recognizes protofibrils and prevents amyloid beta deposition in animal models of Alzheimer's disease. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& 

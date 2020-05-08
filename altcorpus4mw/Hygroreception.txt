@@ -1,0 +1,2 @@
+44	Hygroreception
+Hygroreception &&&&& Introduction &&&&& &&&&& '''Hygroreception''' is the ability to detect changes in the moisture and humidity content of an environment. It is a sense that is not present in humans. Some insects have this sense. The structure responsible for this sense is a hygroreceptor. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 
