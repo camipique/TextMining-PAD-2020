@@ -1,0 +1,2 @@
+51	Dirichlet_hyperbola_method
+Dirichlet hyperbola method &&&&& Introduction &&&&& The '''Dirichlet hyperbola method''' is a technique in number theory to evaluate the sum , where are multiplicative functions and . Here is the Dirichlet convolution. It uses the fact that &&&&& &&&&& : &&&&& &&&&& Let be the number-of-divisors function. Since , the Dirichlet hyperbola method gives us the result &&&&& &&&&& : &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& 

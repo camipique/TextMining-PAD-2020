@@ -1,0 +1,2 @@
+42	Comparison_matrix
+Comparison matrix &&&&& Introduction &&&&& In linear algebra, let be a complex matrix. The '''comparison matrix''' of complex matrix ''A'' is defined as &&&&& &&&&& : &&&&& &&&&& See also &&&&& * Hurwitz matrix &&&&& * P-matrix &&&&& * Perron–Frobenius theorem &&&&& * Z-matrix &&&&& * L-matrix &&&&& * M-matrix &&&&& * H-matrix (iterative method) &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& 

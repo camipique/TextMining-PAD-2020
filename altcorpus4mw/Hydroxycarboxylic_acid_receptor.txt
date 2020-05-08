@@ -1,0 +1,2 @@
+55	Hydroxycarboxylic_acid_receptor
+Hydroxycarboxylic acid receptor &&&&& Introduction &&&&& The '''hydroxycarboxylic acid receptor''' (abbreviated '''HCA receptor''' and '''HCAR''') family includes the following human proteins: &&&&& &&&&& * Hydroxycarboxylic acid receptor 1 (HCA1, formerly known as GPR81) &&&&& * Hydroxycarboxylic acid receptor 2 (HCA2, formerly known as niacin receptor 1 and GPR109A) &&&&& * Hydroxycarboxylic acid receptor 3 (HCA3, formerly known as niacin receptor 2 and GPR109B) &&&&& &&&&& 

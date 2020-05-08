@@ -238,7 +238,7 @@ with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and 
 random_mwu = sample(mwu, 200)
 
 # write the first 200 relevant expressions to calculate precision
-with open("200random-mwu.txt", "w", encoding="utf-8") as file:
+with open("{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1]), "w", encoding="utf-8") as file:
     for exp in random_mwu:
         file.write(str(exp) + "\n")
 

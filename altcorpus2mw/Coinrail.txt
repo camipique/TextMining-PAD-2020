@@ -1,0 +1,2 @@
+62	Coinrail
+Coinrail &&&&& Introduction &&&&& &&&&& '''Coinrail''' is a Korean bitcoin exchange that was hacked in June, 2018. The hack resulted in a drop of the cryptocurrency market worth $42 billion, according to ''Bloomberg News''. According to Yonhap News Agency, the hackers stole 40 billion won or over US$37 million worth of cryptocurrency, mostly Pundi X and Astoncoin. &&&&& &&&&& See also &&&&& *2018 crypto crash &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 
