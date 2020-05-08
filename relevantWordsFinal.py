@@ -6,13 +6,13 @@ PAD Project - Text Mining
 @author: David Pais 50220
 """
 
-# Part 1 - Extracting relevant words
+# Part I - Extracting relevant words
 
-import re, os, math
+import re, os, math, time
+from random import sample
 import numpy as np
 from nltk import FreqDist
 from nltk.util import everygrams
-import time
 
 start_time = time.time()
 
@@ -179,15 +179,13 @@ oneGram_Index = np.argmax(getSize(n_grams) < 2) # for n-gram with n > 2, because
 
 mwu = set()
 
+getEntry = seq.get   
+cohesion_gram = cohesion_measures 
+add = mwu.add
+
 with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and writting file, overwritting the file
     for n_gramIndex in range(0, oneGram_Index):  
    
-        getEntry = seq.get
-        
-        cohesion_gram = cohesion_measures
-        
-        add = mwu.add
-        
         n_gram = n_grams[n_gramIndex]
         left_gram = n_gram[:len(n_gram) - 1]
         right_gram = n_gram[1:]
@@ -235,4 +233,11 @@ with open("mwu.txt", "w+", encoding="utf-8") as file: # w+ for both reading and 
                         add((n_gram_cohesion, " ".join(n_gram)))
         
     file.write(str(mwu))
+
+test = sample(mwu, 200)
+
+with open("200random-mwu.txt", "w+", encoding="utf-8") as file:
+    for i in test:
+        file.write(str(i) + "\n")
+
 print("--- Program ended in %s seconds ---" % (time.time() - start_time))
