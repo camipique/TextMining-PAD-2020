@@ -1,0 +1,7 @@
+corpus2mw:
+
+glue = 88/200
+dice = 69/200
+mi = 63/200
+phi = 72/200
+loglike = 44/200
