@@ -175,73 +175,68 @@ print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
 get_size = np.frompyfunc(len,1,1)
 
-with open("mwu2ndpart.txt", "w+", encoding="utf-8") as file: # w+ for both reading and writting file, overwritting the file
-    for i in range(0, n_documents): # calculate RE for all documents and select 5 documents   
-        one_gram_index = np.argmax(get_size(n_grams_doc[i]) < 2) # for n-gram with n > 2, because the cohesion is not calculated for n = 1
-        for n_gram_index in range(0, one_gram_index):          
+for i in range(0, n_documents): # calculate RE for all documents and select 5 documents   
+    one_gram_index = np.argmax(get_size(n_grams_doc[i]) < 2) # for n-gram with n > 2, because the cohesion is not calculated for n = 1
+    for n_gram_index in range(0, one_gram_index):          
 
-            document_words = len(n_grams_doc[i])
+        document_words = len(n_grams_doc[i])
 
-            get_entry = seq[i].get
+        get_entry = seq[i].get
 
-            cohesion_gram = cohesion_measures
+        cohesion_gram = cohesion_measures
 
-            add = mwu[i].add
+        add = mwu[i].add
 
-            n_gram = n_grams_doc[i][n_gram_index]
+        n_gram = n_grams_doc[i][n_gram_index]
 
-            left_gram = n_gram[:len(n_gram) - 1]
+        left_gram = n_gram[:len(n_gram) - 1]
 
-            right_gram = n_gram[1:]
+        right_gram = n_gram[1:]
 
-            n_gram_freq = n_grams_freq_doc[i][n_gram]
+        n_gram_freq = n_grams_freq_doc[i][n_gram]
 
-            n_gram_cohesion = cohesion_gram(COHESION_MEASURE, n_gram, document_words)
+        n_gram_cohesion = cohesion_gram(COHESION_MEASURE, n_gram, document_words)
 
-            # since we start from both, we only assign values to n-1 levels, since we don't need the values of the cohesion of sevengrams stored
-            left_gram_freq = n_grams_freq_doc[i][left_gram]
-            left_gram_cohesion =  cohesion_gram(COHESION_MEASURE, left_gram, document_words) # E.g. United States of America - United States Of
+        # since we start from both, we only assign values to n-1 levels, since we don't need the values of the cohesion of sevengrams stored
+        left_gram_freq = n_grams_freq_doc[i][left_gram]
+        left_gram_cohesion =  cohesion_gram(COHESION_MEASURE, left_gram, document_words) # E.g. United States of America - United States Of
 
-            right_gram_freq = n_grams_freq_doc[i][right_gram]
-            right_gram_cohesion = cohesion_gram(COHESION_MEASURE, right_gram, document_words) # E.g. United States of America - States of America
-
-
-            # left sub_gram        
-            if get_entry(left_gram):         
-                max_cohesion = seq[i][left_gram][2]    
-                if (n_gram_cohesion >  max_cohesion):
-                    seq[i][left_gram][2] = n_gram_cohesion 
-
-            else:
-                seq[i][left_gram] = [left_gram_freq, left_gram_cohesion, n_gram_cohesion]
-
-            # right sub_gram
-            if  get_entry(right_gram):
-                    max_cohesion = seq[i][right_gram][2]
-                    if(n_gram_cohesion > max_cohesion):
-                        seq[i][right_gram][2] = n_gram_cohesion    
-            else:
-                seq[i][right_gram] = [right_gram_freq, right_gram_cohesion, n_gram_cohesion]
-
-            # Find Relevant Expressions
-            if(len(n_gram) < 7):
-                if(n_gram_freq >= 2): # If the n_gram appears at least 2 times in corpus
-
-                    if(len(n_gram) == 2):
-                        if(n_gram_cohesion > seq[i][n_gram][2]):  
-                            add((n_gram))   #" ".join(n_gram)))
-
-                    else:           
-                        x = max(left_gram_cohesion, right_gram_cohesion)
-                        y = seq[i][n_gram][2]
-
-                        if  (n_gram_cohesion > (x + y) / 2 ):
-                            add((n_gram))  #" ".join(n_gram)))
+        right_gram_freq = n_grams_freq_doc[i][right_gram]
+        right_gram_cohesion = cohesion_gram(COHESION_MEASURE, right_gram, document_words) # E.g. United States of America - States of America
 
 
-        #file.write(str(mwu[i]) + '\n') # maybe we don't need this?
+        # left sub_gram        
+        if get_entry(left_gram):         
+            max_cohesion = seq[i][left_gram][2]    
+            if (n_gram_cohesion >  max_cohesion):
+                seq[i][left_gram][2] = n_gram_cohesion 
 
-print("--- Program ended in %s seconds ---" % (time.time() - start_time))
+        else:
+            seq[i][left_gram] = [left_gram_freq, left_gram_cohesion, n_gram_cohesion]
+
+        # right sub_gram
+        if  get_entry(right_gram):
+                max_cohesion = seq[i][right_gram][2]
+                if(n_gram_cohesion > max_cohesion):
+                    seq[i][right_gram][2] = n_gram_cohesion    
+        else:
+            seq[i][right_gram] = [right_gram_freq, right_gram_cohesion, n_gram_cohesion]
+
+        # Find Relevant Expressions
+        if(len(n_gram) < 7):
+            if(n_gram_freq >= 2): # If the n_gram appears at least 2 times in corpus
+
+                if(len(n_gram) == 2):
+                    if(n_gram_cohesion > seq[i][n_gram][2]):  
+                        add((n_gram))   #" ".join(n_gram)))
+
+                else:           
+                    x = max(left_gram_cohesion, right_gram_cohesion)
+                    y = seq[i][n_gram][2]
+
+                    if  (n_gram_cohesion > (x + y) / 2 ):
+                        add((n_gram))  #" ".join(n_gram)))
+
 
 # Calculate correlation for finding implicit keywords (semantic proximity)
 
@@ -272,9 +267,9 @@ for f in range(0, 5): # only RE present in the 5 documents
                                 average_doc_freq_B += n_grams_freq_doc[n][re_outside] /  len(n_grams_doc[n])
 
 
-                            cov = np.sum( (n_grams_freq_doc[m][re_document] - average_doc_freq_A/ i ) * (n_grams_freq_doc[m][re_outside] - average_doc_freq_B/ i))
+                            cov = np.sum( (n_grams_freq_doc[m][re_document] - average_doc_freq_A/ n_documents) * (n_grams_freq_doc[m][re_outside] - average_doc_freq_B/ n_documents))
 
-                        cov = cov/ (i - 1)
+                        cov = cov/ (n_documents - 1) 
                         corr.add((re_document, re_outside, cov))
                     break  # we already know both expressions appear at least once in the document
 
@@ -320,6 +315,8 @@ doc_top_explicit = {}
 for doc in tf_idf:
     doc_top_explicit[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
     
-    
+
+print("--- Program ended in %s seconds ---" % (time.time() - start_time))    
+
 
 # After this calculate the score to determine the implit keywords of each document     
