@@ -165,13 +165,14 @@ def read_corpus():
             seq[i] = dict()
 
             mwu[i] = set()
+            
+    print("Corpus read in %s seconds" % (time.time() - start_time))
 
     return document, n_grams_doc, n_grams_freq_doc, seq, mwu, i + 1
 
 
 documents, n_grams_doc, n_grams_freq_doc, seq, mwu, n_documents = read_corpus()
 
-print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
 get_size = np.frompyfunc(len,1,1)
 
@@ -283,29 +284,45 @@ for f in range(0, 5): # only RE present in the 5 documents
 
 # Calculate Tf-Idf of RE of each document for finding explicit document keywords
                 
+# Calculate Tf-Idf of RE of each document for finding explicit document keywords
+
+def syllable_count(word):
+    word = word.lower()
+    count = 0
+    vowels = "aeiou"
+    if word[0] in vowels:
+        count += 1
+    for index in range(1, len(word)):
+        if word[index] in vowels and word[index - 1] not in vowels:
+            count += 1
+    if word.endswith("e"):
+        count -= 1
+    if count == 0:
+        count += 1
+    return count
+           
 tf_idf = {}
 aux = {}
       
 for i in documents:
     doc_word_count = len(documents[i])
-    doc_word_freq = FreqDist(documents[i])
     
-    for word in doc_word_freq:
-        if aux.get(word):
-            aux[word][i] = doc_word_freq[word]/doc_word_count
+    for relevant_expression in mwu[i]:
+        if aux.get(relevant_expression):
+            aux[relevant_expression][i] = n_grams_freq_doc[i][relevant_expression]/doc_word_count
         else:
-            aux[word] = {i: doc_word_freq[word]/doc_word_count}
+            aux[relevant_expression] = {i: n_grams_freq_doc[i][relevant_expression]/doc_word_count}
             
 
-for word in aux:
-    for x in aux[word]:
+for relevant_expression in aux:
+    for x in aux[relevant_expression]:
         
-        tf_idf_value = aux[word][x] * math.log(n_documents / len(aux[word])) * len(word)
+        tf_idf_value = aux[relevant_expression][x] * math.log(n_documents / len(aux[relevant_expression])) * syllable_count(" ".join(relevant_expression))
         
         if tf_idf.get(x):
-            tf_idf[x][word] = tf_idf_value
+            tf_idf[x][relevant_expression] = tf_idf_value
         else:
-            tf_idf[x] = { word: tf_idf_value }
+            tf_idf[x] = { relevant_expression: tf_idf_value }
 
 
 
@@ -316,7 +333,7 @@ for doc in tf_idf:
     doc_top_explicit[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
     
 
-print("--- Program ended in %s seconds ---" % (time.time() - start_time))    
+print("Program ended in %s seconds" % (time.time() - start_time))    
 
 
 # After this calculate the score to determine the implit keywords of each document     
