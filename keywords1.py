@@ -41,8 +41,8 @@ def phi(n_gram, document_words):
 def log_l(p, k, m): # auxiliar function for logLike cohesion measure
         return k * math.log(p) + (m - k) * math.log(1-p)
 
-def logLike(n_gram, document_words):
-    left_subgram, right_subgram = cohesion(n_gram, 'logLike')
+def log_like(n_gram, document_words):
+    left_subgram, right_subgram = cohesion(n_gram, 'log_like', document_words)
     kf1 = document_words * n_gram_prob(n_gram, document_words)
     kf2 = left_subgram - kf1
     nf1 = right_subgram
@@ -81,7 +81,7 @@ def cohesion (n_gram, measure, document_words):
                 right_subgram = right_subgram * document_words
                 avq += left_subgram * right_subgram 
                 avd += (left_subgram * right_subgram) * (document_words - left_subgram) * (document_words - right_subgram)        
-            elif(measure == 'logLike'):
+            elif(measure == 'log_like'):
                 avx += document_words * left_subgram
                 avy += document_words * right_subgram            
             else:                    
@@ -96,7 +96,7 @@ def cohesion (n_gram, measure, document_words):
         
         return avq, avd
     
-    if(measure == 'logLike'):
+    if(measure == 'log_like'):
         avx = avx / (  n_gram_size  - 1 )
         avy = avy / (  n_gram_size  - 1 )
         
@@ -118,8 +118,8 @@ def cohesion_measures(measure_type, n_gram, document_words):
         return mi(n_gram, document_words)
     elif(measure_type == 'phi'):
         return phi(n_gram, document_words)
-    elif(measure_type == 'logLike'):
-        return logLike(n_gram, document_words)
+    elif(measure_type == 'log_like'):
+        return log_like(n_gram, document_words)
     else:
         return glue(n_gram, document_words) # glue is the default measure
 
@@ -258,7 +258,7 @@ for f in range(0, 5): # only RE present in the 5 documents
                 document_re = list(mwu[f])
                 document_outside_re = list(mwu[h]) # Look for all RE outside the document
                 re_document = document_re[g]
-                re_outside = tuple(document_outside_re[j])
+                re_outside = document_outside_re[j]
                 
                 # if A (always inside the document) and B (outside) never appear together in at least one document, the correlation is 0.
                 
@@ -270,7 +270,7 @@ for f in range(0, 5): # only RE present in the 5 documents
                                 average_doc_freq_B += n_grams_freq_doc[n][re_outside] /  len(n_grams_doc[n])
                             
 
-                            cov = np.sum( (n_grams_freq_doc[m][re_document] - average_doc_freqA/(i + 1) ) * (n_grams_freq_doc[m][re_outside] - average_doc_freqB/(i + 1)))
+                            cov = np.sum( (n_grams_freq_doc[m][re_document] - average_doc_freq_A/(i + 1) ) * (n_grams_freq_doc[m][re_outside] - average_doc_freq_B/(i + 1)))
                         
                         cov = cov/ i # i + 1 - 1 = i
                         corr.add((re_document, re_outside, cov))
