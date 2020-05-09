@@ -124,7 +124,7 @@ def cohesion_measures(measureType, n_gram, document_words):
     else:
         return glue(n_gram, document_words) # glue is the default measure
 
-def readCorpus():
+def read_corpus():
     # Find a set of word characters ([\w'’-])     + means that has at least one ocurrence or more of words followed or not by '’-
     # | means or (word characters or punctuation)    
     # where the punctuation is [      ] within this set
@@ -133,7 +133,7 @@ def readCorpus():
     # [ ; : ! ? < > & ( )  \[  \]  \"  \. , = / \\ (to not interpret \ as an escaoe signal)]
     # Not adding spaces on ' and - when they are attached to words
     # And also not substituting isolated '’- with white spaces 
-    print("Reading corpus...\n")
+    print("Reading corpus...")
     
     regex = re.compile("[\w'’-]+|[;:!?<>&\(\)\[\]\"\.,=/\\\^\$\*\+\|\{\}]|[\S'’-]+")
     
@@ -145,9 +145,9 @@ def readCorpus():
 
     # order by number and not by the order of the underlying operating system
     for file_name, i in zip(sorted(os.listdir(CORPUS_FOLDER_PATH), key = len), range(len(os.listdir(CORPUS_FOLDER_PATH)))):  
-#        print(i)
-#        print(CORPUS_FOLDER_PATH + file_name)
+
         with open(CORPUS_FOLDER_PATH + file_name, "r", encoding="utf8") as f:
+            
             text = f.read()
             
             # remove doc identification strings
@@ -156,28 +156,26 @@ def readCorpus():
             # find the regex defined in text             
             document[i] =  re.findall(regex, textWithoutDoc)
             
-            n_grams_doc[i] = list(everygrams(document[i], min_len=1, max_len=7)) # invert to iterate from 7-grams to 1-grams
+            n_grams_doc[i] = set(everygrams(document[i], min_len=1, max_len=7)) # invert to iterate from 7-grams to 1-grams
 
             n_grams_freq_doc[i] = FreqDist(n_grams_doc[i])
-
-            n_grams_doc[i] = sorted(set(n_grams_doc[i]), key = len, reverse = True)
+            n_grams_doc[i] = sorted(n_grams_doc[i], key = len, reverse = True)
             
             seq[i] = dict()
-            
             mwu[i] = set()
+            
+    print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
     return document, n_grams_doc, n_grams_freq_doc, seq, mwu, i
 
 
-documents, n_grams_doc, n_grams_freq_doc, seq, mwu, i = readCorpus()
+documents, n_grams_doc, n_grams_freq_doc, seq, mwu, i = read_corpus()
 
-print("Corpus read in %s seconds\n" % (time.time() - start_time))
-
-getSize = np.frompyfunc(len,1,1)
+get_size = np.frompyfunc(len,1,1)
 
 with open("mwu2ndpart.txt", "w+", encoding="utf-8") as file: # w+ for both reading and writting file, overwritting the file
     for i in range(0, i + 1 ): # calculate RE for all documents and select 5 documents   
-        one_gram_index = np.argmax(getSize(n_grams_doc[i]) < 2) # for n-gram with n > 2, because the cohesion is not calculated for n = 1
+        one_gram_index = np.argmax(get_size(n_grams_doc[i]) < 2) # for n-gram with n > 2, because the cohesion is not calculated for n = 1
         for n_gram_index in range(0, one_gram_index):          
             
             document_words = len(n_grams_doc[i])
@@ -313,6 +311,6 @@ for x in aux:
 # do the same for relevant expresions (tf_idf_re)
 
 
+
     
-    
-    
+print("Program ended in %s seconds." % (time.time() - start_time))
