@@ -289,7 +289,7 @@ for f in range(0, 5): # only RE present in the 5 documents
 # After this calculate the score to determine the implit keywords of each document         
 
 N_DOCS = 10
-tf_idf = {} # entries (word, doc)
+tf_idf_word = {} # entries (word, doc)
 aux = {}
       
 for i in documents:
@@ -306,9 +306,11 @@ for i in documents:
 
 for x in aux:
     for y in aux[x]:
-        tf_idf[(x, y)] = aux[x][y] * math.log(N_DOCS / len(aux[x])) * len(x)
+        tf_idf_word[(x, y)] = aux[x][y] * math.log(N_DOCS / len(aux[x])) * len(x)
 
-
+# choose the highest 5 for each doc(up to us, but teacher said 5 is good)
+        
+# do the same for relevant expresions (tf_idf_re)
 
 
     
