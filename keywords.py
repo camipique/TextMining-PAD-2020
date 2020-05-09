@@ -241,7 +241,7 @@ with open("mwu2ndpart.txt", "w+", encoding="utf-8") as file: # w+ for both readi
             
         #file.write(str(mwu[i]) + '\n') # maybe we don't need this?
 
-print("--- Program ended in %s seconds ---" % (time.time() - start_time))
+
 
 # Calculate correlation for finding implicit keywords (semantic proximity)
 
@@ -306,8 +306,7 @@ for i in documents:
 
 for x in aux:
     for y in aux[x]:
-#        tf_idf[x][y] = tf_idf[x][y] * math.log(N_DOCS / len(tf_idf[x]))
-        tf_idf[(x, y)] = aux[x][y] * math.log(N_DOCS / len(aux[x]))
+        tf_idf[(x, y)] = aux[x][y] * math.log(N_DOCS / len(aux[x])) * len(x)
 
 
 
