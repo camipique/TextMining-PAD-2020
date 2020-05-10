@@ -242,7 +242,7 @@ for n_gram_index in range(0, one_gram_index):
   
   
 # w+ for both reading and writting file, overwritting the file    
-with open("/mwu/{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w+", encoding="utf-8") as file:       
+with open("{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w+", encoding="utf-8") as file:       
     file.write(str(mwu))
 
 # get 200 relevant expressions randomly from the ones found
