@@ -7,9 +7,9 @@ PAD Project - Text Mining
 
 # Part II a) - Automatic Extraction of Explicit and Implicit Keywords
 
-import re, os, math
+import re, os, math, heapq, statistics
 import numpy as np
-import heapq
+
 from nltk import FreqDist
 from nltk.util import everygrams
 import time
@@ -317,7 +317,12 @@ for i in documents:
 for relevant_expression in aux:
     for x in aux[relevant_expression]:
         
-        tf_idf_value = aux[relevant_expression][x] * math.log(n_documents / len(aux[relevant_expression])) * syllable_count(" ".join(relevant_expression))
+        syllables = []
+        
+        for i in relevant_expression:
+            syllables.append(syllable_count(i))
+        
+        tf_idf_value = aux[relevant_expression][x] * math.log(n_documents / len(aux[relevant_expression])) * statistics.median(syllables)
         
         if tf_idf.get(x):
             tf_idf[x][relevant_expression] = tf_idf_value
