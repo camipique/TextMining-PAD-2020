@@ -134,7 +134,7 @@ def read_corpus():
     # [ ; : ! ? < > & ( )  \[  \]  \"  \. , = / \\ (to not interpret \ as an escaoe signal)]
     # Not adding spaces on ' and - when they are attached to words
     # And also not substituting isolated '’- with white spaces 
-    print("Reading corpus...\n")
+    print("Reading corpus...")
     
     regex = re.compile("[\w'’-]+|[;:!?<>&\(\)\[\]\"\.,=/\\\^\$\*\+\|\{\}\%\'\’\-\...\“\”\—\–\§\¿?¡!]|[\S'’-]+") 
     
@@ -156,13 +156,14 @@ def read_corpus():
              
             text_split_str += " ".join(text_list)
             text_split_list.extend(text_list)
+        
+    print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
     return text_split_list
 
+print("\nExtracting Relevant Expressions from {} using {} as cohesion measure.\n".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE))
 
 text_split_list = read_corpus()
-
-print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
 n_grams = list(everygrams(text_split_list, min_len=1, max_len=7)) # invert to iterate from 7-grams to 1-grams
 
@@ -241,14 +242,14 @@ for n_gram_index in range(0, one_gram_index):
   
   
 # w+ for both reading and writting file, overwritting the file    
-with open("{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w+", encoding="utf-8") as file:       
+with open(os.path.join("mwu", "{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE)), "w+", encoding="utf-8") as file:       
     json.dump(mwu, file) 
 
 # get 200 relevant expressions randomly from the ones found
 random_mwu = sample(set(mwu), 200) # it gives us the keys of the dictionary
 
 # write the first 200 relevant expressions to calculate precision
-with open("{}-{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w", encoding="utf-8") as file:
+with open(os.path.join("mwu", "{}-{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE)), "w", encoding="utf-8") as file:
     json.dump(random_mwu, file) 
 
-print("--- Program ended in %s seconds ---" % (time.time() - start_time))
+print("Relevant Expressions extraction ended in %s seconds" % (time.time() - start_time))
