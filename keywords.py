@@ -72,23 +72,46 @@ def read_extractor():
 
 def find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re):
         
+  
+    average_prob = dict()
+    
     for corpus_re in extracted_re:
     
         n_docs = n_grams_doc[corpus_re]
+        mean_prob = 0
+        average_prob[corpus_re] = 0
 
         for doc in n_docs:
+             
             
-      
             docs_re[doc][corpus_re] =  n_grams_freq_corpus_doc[doc][corpus_re]
+            
+            # average_prob
+            mean_prob += n_grams_freq_corpus_doc[doc][corpus_re] / docs_size[doc]
 
+
+        mean_prob *= 1 / n_documents
+
+        average_prob[corpus_re] = mean_prob
             #else:
             #    docs_re[doc][corpus_re] = {corpus_re : n_grams_freq_corpus_doc[doc][corpus_re]}
-                
+         
         
         #ocs_re[re_doc].update({corpus_re : n_grams_freq_corpus_doc[re_doc][corpus_re]})
         
-    return docs_re
+    return docs_re, average_prob
     
+"""
+def average_prob(extracted_re, n_grams_freq_corpus_doc):
+    
+    mean_prob = 0
+    
+    
+    for n_doc in n_grams_freq_corpus_doc:
+        mean_prob += n_grams_freq_corpus_doc[n_doc] / docs_size[n_doc]
+"""        
+
+
 
 def syllable_count(word):
     word = word.lower()
@@ -109,13 +132,11 @@ def syllable_count(word):
 
 docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text, docs_re, n_documents = read_corpus()
 
+extracted_re_with_cohesion = read_extractor()
 
+extracted_re = list([tuple(re.split(' ')) for re in extracted_re_with_cohesion ])     
 
-extracted_re = read_extractor()
-
-extracted_re = list([tuple(re.split(' ')) for re in extracted_re])     
-
-docs_re = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
+docs_re, average_prob = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
 
                 
 # Calculate Tf-Idf of RE of each document for finding explicit document keywords
@@ -151,40 +172,61 @@ for doc in chosen_docs:
     top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
                    
 print("Explicit keywords found in %s seconds" % (time.time() - start_time))      
-        
-        
-"""   
-    if prob_doc_re.get(relevant_expression):
-             prob_doc_re[relevant_expression][re_doc] = docs_re[re_doc][relevant_expression]/docs_size[re_doc]
-    else:
-             prob_doc_re[relevant_expression] = {re_doc:  n_grams_freq_corpus_doc[re_doc][relevant_expression]/docs_size[re_doc]}
-             
-"""
+ 
+
+# Calculate correlation for finding implicit keywords (semantic proximity)
+
+print("Calculating correlaton") 
+
+corr = dict()
 
 
-"""
-for relevant_expression in aux:
-    for x in aux[relevant_expression]:
+for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
+    print(n_doc_A)
+    for a in top_tf_idf[n_doc_A]: #g    # 
         
-        syllables = []
         
-        for i in relevant_expression:
-            syllables.append(syllable_count(i))
+        for n_doc_B in docs_re : #h
+            
+            if n_doc_A == n_doc_B: # it means we are comparing RE in the same document, we only want RE from other documents.
+                continue
+            
+            for b in docs_re[n_doc_B]: #j 
+                
+                
+                #for l in range(0, n_documents):
+                     # se ambas são RE de um doc
+                 #   if(n_grams_freq_doc[l][a] > 0 and n_grams_freq_doc[l][b] > 0):
         
-        tf_idf_value = aux[relevant_expression][x] * math.log(n_documents / len(aux[relevant_expression])) * syllable_count(" ".join(relevant_expression))
-        
-        if tf_idf.get(x):
-            tf_idf[x][relevant_expression] = tf_idf_value
-        else:
-            tf_idf[x] = { relevant_expression: tf_idf_value }
+                # podemos ir ao n_grams_doc, e fazer um intersect dos sets de ambas
+                if n_grams_doc[a] & n_grams_doc[b]:
+                    
+                    cov_a_b = 1 / (n_documents - 1)
+                    cov_a_a = 1 / (n_documents - 1)
+                    cov_b_b = 1 / (n_documents - 1)
+                    
+                    aux_cov_ab = 0
+                    aux_cov_aa = 0
+                    aux_cov_bb = 0
+                    
+                    
+                    for n_doc in range(0, n_documents):
+                    
+                        aux_cov_ab += (n_grams_freq_corpus_doc[n_doc][a]  / docs_size[n_doc] - average_prob[a]) * (n_grams_freq_corpus_doc[n_doc][b]  / docs_size[n_doc] - average_prob[b])
+                        aux_cov_aa += (n_grams_freq_corpus_doc[n_doc][a]  / docs_size[n_doc] - average_prob[a]) * (n_grams_freq_corpus_doc[n_doc][a]  / docs_size[n_doc] - average_prob[a])
+                        aux_cov_bb += (n_grams_freq_corpus_doc[n_doc][b]  / docs_size[n_doc] - average_prob[b]) * (n_grams_freq_corpus_doc[n_doc][b]  / docs_size[n_doc] - average_prob[b])
 
-# choose the highest 5 for each doc
-doc_top_explicit = {}     
-   
-for doc in tf_idf:
-    doc_top_explicit[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
-    
+                    cov_a_b *= aux_cov_ab
+                    cov_a_a *= aux_cov_aa
+                    cov_b_b *= aux_cov_bb
 
-print("Program ended in %s seconds" % (time.time() - start_time))    
+                    corr_a_b = cov_a_b /  (math.sqrt(cov_a_a) * math.sqrt(cov_b_b))
+                      
+                    corr[(b, a)] =  corr_a_b
 
-"""
+
+print("Calculated correlatons in %s seconds" % (time.time() - start_time)) 
+
+# Intra-document Proximity (IP)
+
+
