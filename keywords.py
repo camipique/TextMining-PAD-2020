@@ -66,4 +66,4 @@ docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text = read_corpus()
 
 extracted_re = read_extractor()
 
-res = list([tuple(re.split(' ')) for re in extracted_re])     
+extracted_re = list([tuple(re.split(' ')) for re in extracted_re])     
