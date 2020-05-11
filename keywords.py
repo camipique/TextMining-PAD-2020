@@ -14,12 +14,12 @@ from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "test/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
+CORPUS_FOLDER_PATH = "corpus2mw/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
 COHESION_MEASURE = "glue" # just here to don't forget to talk in the report about running the other file with the measure we want before running keywords
 
 def read_corpus():
 
-    print("Reading corpus...\n")
+    print("Reading corpus...")
     
     regex = re.compile("[\w'’-]+|[;:!?<>&\(\)\[\]\"\.,=/\\\^\$\*\+\|\{\}\%\'\’\-\...\“\”\—\–\§\¿?¡!]|[\S'’-]+") 
     
@@ -57,7 +57,8 @@ def read_corpus():
             docs_re[i] = dict()
             
             docs_text[i] = text_list
-
+            
+    print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
     return docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text, docs_re, i + 1
 
@@ -116,19 +117,13 @@ extracted_re = list([tuple(re.split(' ')) for re in extracted_re])
 
 docs_re = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
 
-print("Corpus read in %s seconds\n" % (time.time() - start_time))
-
-
-
-
-
                 
 # Calculate Tf-Idf of RE of each document for finding explicit document keywords
 
            
 tf_idf = dict()
+top_tf_idf = dict()
 chosen_docs = set() # we choose random documents with more than 10 relevant expressions in the corpus 
-
 
 
 for doc in docs_re:
@@ -136,31 +131,24 @@ for doc in docs_re:
     if len(docs_re[doc]) > 10:
         chosen_docs.add(doc)
         tf_idf[doc] = dict()
+        top_tf_idf[doc] = dict()
     
     if len(chosen_docs) == 5:
         break
     
     
-
-
-#for i in range(0, n_documents):
-
-#for i in range (0, 5):
-
 for doc in chosen_docs:
-    
     for relevant_expression in docs_re[doc]:
-    
-         # n_words = [len(term) for term in relevant_expression]
-         # n_syllables = [syllable_count(term) for term in relevant_expression]
-        
+        # n_syllables = [syllable_count(term) for term in relevant_expression]
+        n_words = statistics.mean([len(term) for term in relevant_expression])
         n_syllables = syllable_count(" ".join(relevant_expression))                   
                                                                                                                                                                        
         #statistics.median(n_syllables), statistics.mean(n_words), and others
-        tf_idf[doc][relevant_expression] = (docs_re[doc][relevant_expression]/docs_size[doc]) * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * n_syllables  
+        tf_idf[doc][relevant_expression] = (docs_re[doc][relevant_expression]/docs_size[doc]) * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * n_words  
 
-               
-        
+
+for doc in tf_idf:
+    top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)               
         
         
         
