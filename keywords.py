@@ -140,16 +140,17 @@ for doc in docs_re:
 for doc in chosen_docs:
     for relevant_expression in docs_re[doc]:
         # n_syllables = [syllable_count(term) for term in relevant_expression]
-        n_words = statistics.mean([len(term) for term in relevant_expression])
-        n_syllables = syllable_count(" ".join(relevant_expression))                   
-                                                                                                                                                                       
-        #statistics.median(n_syllables), statistics.mean(n_words), and others
-        tf_idf[doc][relevant_expression] = (docs_re[doc][relevant_expression]/docs_size[doc]) * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * n_words  
-
-
-for doc in tf_idf:
-    top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)               
         
+        weigth = statistics.median([len(term) for term in relevant_expression])
+        # weigth = syllable_count(" ".join(relevant_expression))             
+        
+
+        #statistics.median(n_syllables), statistics.mean(n_words), and others
+        tf_idf[doc][relevant_expression] = docs_re[doc][relevant_expression] / docs_size[doc] * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * weigth  
+
+    top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
+                   
+print("Explicit keywords found in %s seconds" % (time.time() - start_time))      
         
         
 """   
