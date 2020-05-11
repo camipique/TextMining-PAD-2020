@@ -134,7 +134,7 @@ def read_corpus():
     # [ ; : ! ? < > & ( )  \[  \]  \"  \. , = / \\ (to not interpret \ as an escaoe signal)]
     # Not adding spaces on ' and - when they are attached to words
     # And also not substituting isolated '’- with white spaces 
-    print("Reading corpus...\n")
+    print("Reading corpus...")
     
     regex = re.compile("[\w'’-]+|[;:!?<>&\(\)\[\]\"\.,=/\\\^\$\*\+\|\{\}\%\'\’\-\...\“\”\—\–\§\¿?¡!]|[\S'’-]+") 
     
@@ -156,13 +156,14 @@ def read_corpus():
              
             text_split_str += " ".join(text_list)
             text_split_list.extend(text_list)
-
+            
+    print("Corpus read in %s seconds\n" % (time.time() - start_time))    
+    
     return text_split_list
 
 
 text_split_list = read_corpus()
 
-print("Corpus read in %s seconds\n" % (time.time() - start_time))
 
 n_grams = list(everygrams(text_split_list, min_len=1, max_len=7)) # invert to iterate from 7-grams to 1-grams
 
@@ -249,7 +250,6 @@ random_mwu = sample(mwu, 200)
 
 # write the first 200 relevant expressions to calculate precision
 with open("{}-{}-200random-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "w", encoding="utf-8") as file:
-    #for exp in random_mwu:
     file.write(str(random_mwu) + "\n")
 
-print("--- Program ended in %s seconds ---" % (time.time() - start_time))
+print("Program ended in %s seconds" % (time.time() - start_time))
