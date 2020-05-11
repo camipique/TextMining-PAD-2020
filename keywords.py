@@ -14,7 +14,7 @@ from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpus2mw/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
+CORPUS_FOLDER_PATH = "test/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
 COHESION_MEASURE = "glue" # just here to don't forget to talk in the report about running the other file with the measure we want before running keywords
 
 def read_corpus():
@@ -122,12 +122,14 @@ extracted_re_with_cohesion = read_extractor()
 #print(list(extracted_re_with_cohesion.values()) )
 
 # Filter to keep RE which cohesions are bigger than 0.05
-extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.1 } 
+extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.3 } 
 
 extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold ])     
 
 docs_re, average_prob = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
-            
+
+print("Calculating explicit keywords...") 
+
 # Calculate Tf-Idf of RE of each document for finding explicit document keywords
  
 tf_idf = dict()
@@ -160,20 +162,19 @@ print("Explicit keywords found in %s seconds\n" % (time.time() - start_time))
  
 # Calculate correlation for finding implicit keywords (semantic proximity)
 
-print("Calculating correlation") 
+print("Calculating correlations...") 
 
 corr = dict()
 
-for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
-    print(n_doc_A)
-    for a in top_tf_idf[n_doc_A]: #g    # 
-        print(a)
-        for n_doc_B in docs_re : #h
+
+for n_doc_A in chosen_docs: # only RE present in the 5 documents
+    for a in top_tf_idf[n_doc_A]:
+        for n_doc_B in docs_re:
             
             if n_doc_A == n_doc_B: # it means we are comparing RE in the same document, we only want RE from other documents.
                 continue
             
-            for b in docs_re[n_doc_B]: #j 
+            for b in docs_re[n_doc_B]:
                 
                 # podemos ir ao n_grams_doc, e fazer um intersect dos sets de ambas
                 if n_grams_doc[a] & n_grams_doc[b]:
@@ -200,8 +201,29 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
                       
                     corr[(b, a)] = corr_a_b
 
-print("Calculated correlatons in %s seconds" % (time.time() - start_time)) 
+print("Calculated correlatsons in %s seconds\n" % (time.time() - start_time)) 
 
 # Intra-document Proximity (IP)
 
 
+print("Calculating implicit keywords...") 
+# Scores
+scores = dict()
+top_scores = dict()
+
+for doc in chosen_docs:
+    # Correlacao no mm doc da 0
+    scores[doc] = dict()
+    
+    for relevant_expression in extracted_re:
+        score = 0
+        for i, explicit_keyword in enumerate(top_tf_idf[doc]):
+            
+            if corr.get((relevant_expression, explicit_keyword)):
+                score += corr[(relevant_expression, explicit_keyword)] / (i+1)
+            
+        scores[doc][relevant_expression] = score
+        
+    top_scores[doc] = heapq.nlargest(5, scores[doc], key=scores[doc].get)
+            
+print("Calculated implicit keywords in %s seconds\n" % (time.time() - start_time)) 
