@@ -59,10 +59,11 @@ def read_extractor():
     with open("{}-{}-mwu.txt".format(CORPUS_FOLDER_PATH[:-1], COHESION_MEASURE), "r", encoding="utf-8") as file: 
         extracted_re = json.load(file)
         
-    return set(extracted_re)
+    return extracted_re
 
 
 docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text = read_corpus()
 
 extracted_re = read_extractor()
 
+res = list([tuple(re.split(' ')) for re in extracted_re])     
