@@ -9,13 +9,12 @@ PAD Project - Text Mining
 # Part II a) - Automatic Extraction of Explicit and Implicit Keywords
 
 import re, os, time, json, heapq, statistics, math
-import numpy as np
 from nltk import FreqDist
 from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "test/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
+CORPUS_FOLDER_PATH = "corpus2mw/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
 COHESION_MEASURE = "glue" # just here to don't forget to talk in the report about running the other file with the measure we want before running keywords
 
 def read_corpus():
@@ -84,7 +83,6 @@ def find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re):
 
         for doc in n_docs:
              
-            
             docs_re[doc][corpus_re] =  n_grams_freq_corpus_doc[doc][corpus_re]
             
             # average_prob
@@ -101,18 +99,6 @@ def find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re):
         #ocs_re[re_doc].update({corpus_re : n_grams_freq_corpus_doc[re_doc][corpus_re]})
         
     return docs_re, average_prob
-    
-"""
-def average_prob(extracted_re, n_grams_freq_corpus_doc):
-    
-    mean_prob = 0
-    
-    
-    for n_doc in n_grams_freq_corpus_doc:
-        mean_prob += n_grams_freq_corpus_doc[n_doc] / docs_size[n_doc]
-"""        
-
-
 
 def syllable_count(word):
     word = word.lower()
@@ -127,8 +113,6 @@ def syllable_count(word):
         count += 1
     return count
 
-
-
 # Main method
 
 docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text, docs_re, n_documents = read_corpus()
@@ -138,20 +122,17 @@ extracted_re_with_cohesion = read_extractor()
 #print(list(extracted_re_with_cohesion.values()) )
 
 # Filter to keep RE which cohesions are bigger than 0.05
-extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.05 } 
+extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.1 } 
 
-extracted_re = list([tuple(re.split(' ')) for re in extracted_re_with_cohesion ])     
+extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold ])     
 
 docs_re, average_prob = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
-
-                
+            
 # Calculate Tf-Idf of RE of each document for finding explicit document keywords
-
-           
+ 
 tf_idf = dict()
 top_tf_idf = dict()
 chosen_docs = set() # we choose random documents with more than 10 relevant expressions in the corpus 
-
 
 for doc in docs_re:
 
@@ -163,7 +144,6 @@ for doc in docs_re:
     if len(chosen_docs) == 5:
         break
     
-    
 for doc in chosen_docs:
     for relevant_expression in docs_re[doc]:
         # n_syllables = [syllable_count(term) for term in relevant_expression]
@@ -171,27 +151,23 @@ for doc in chosen_docs:
         weigth = statistics.median([len(term) for term in relevant_expression])
         # weigth = syllable_count(" ".join(relevant_expression))             
         
-
         #statistics.median(n_syllables), statistics.mean(n_words), and others
         tf_idf[doc][relevant_expression] = docs_re[doc][relevant_expression] / docs_size[doc] * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * weigth  
 
     top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get)
                    
-print("Explicit keywords found in %s seconds" % (time.time() - start_time))      
+print("Explicit keywords found in %s seconds\n" % (time.time() - start_time))      
  
-
 # Calculate correlation for finding implicit keywords (semantic proximity)
 
-print("Calculating correlaton") 
+print("Calculating correlation") 
 
 corr = dict()
-
 
 for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
     print(n_doc_A)
     for a in top_tf_idf[n_doc_A]: #g    # 
-        
-        
+        print(a)
         for n_doc_B in docs_re : #h
             
             if n_doc_A == n_doc_B: # it means we are comparing RE in the same document, we only want RE from other documents.
@@ -199,11 +175,6 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
             
             for b in docs_re[n_doc_B]: #j 
                 
-                
-                #for l in range(0, n_documents):
-                     # se ambas são RE de um doc
-                 #   if(n_grams_freq_doc[l][a] > 0 and n_grams_freq_doc[l][b] > 0):
-        
                 # podemos ir ao n_grams_doc, e fazer um intersect dos sets de ambas
                 if n_grams_doc[a] & n_grams_doc[b]:
                     
@@ -215,7 +186,6 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
                     aux_cov_aa = 0
                     aux_cov_bb = 0
                     
-                    
                     for n_doc in range(0, n_documents):
                     
                         aux_cov_ab += (n_grams_freq_corpus_doc[n_doc][a]  / docs_size[n_doc] - average_prob[a]) * (n_grams_freq_corpus_doc[n_doc][b]  / docs_size[n_doc] - average_prob[b])
@@ -226,10 +196,9 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents   #f
                     cov_a_a *= aux_cov_aa
                     cov_b_b *= aux_cov_bb
 
-                    corr_a_b = cov_a_b /  (math.sqrt(cov_a_a) * math.sqrt(cov_b_b))
+                    corr_a_b = cov_a_b / (math.sqrt(cov_a_a) * math.sqrt(cov_b_b))
                       
-                    corr[(b, a)] =  corr_a_b
-
+                    corr[(b, a)] = corr_a_b
 
 print("Calculated correlatons in %s seconds" % (time.time() - start_time)) 
 
