@@ -9,12 +9,13 @@ PAD Project - Text Mining
 # Part II a) - Automatic Extraction of Explicit and Implicit Keywords
 
 import re, os, time, json, heapq, statistics, math
+import numpy as np
 from nltk import FreqDist
 from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpus2mw/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
+CORPUS_FOLDER_PATH = "test/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
 COHESION_MEASURE = "glue" # just here to don't forget to talk in the report about running the other file with the measure we want before running keywords
 
 def read_corpus():
@@ -133,6 +134,11 @@ def syllable_count(word):
 docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text, docs_re, n_documents = read_corpus()
 
 extracted_re_with_cohesion = read_extractor()
+
+#print(list(extracted_re_with_cohesion.values()) )
+
+# Filter to keep RE which cohesions are bigger than 0.05
+extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.05 } 
 
 extracted_re = list([tuple(re.split(' ')) for re in extracted_re_with_cohesion ])     
 
