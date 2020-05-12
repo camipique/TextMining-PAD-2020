@@ -14,7 +14,7 @@ from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "test/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
+CORPUS_FOLDER_PATH = "corpus2mw/"  # and that we need to change the measure on the extractor file and here to load the file we extracted of that measure
 COHESION_MEASURE = "glue" # just here to don't forget to talk in the report about running the other file with the measure we want before running keywords
 
 def read_corpus():
@@ -119,10 +119,8 @@ docs_size, n_grams_freq_corpus_doc, n_grams_doc, docs_text, docs_re, n_documents
 
 extracted_re_with_cohesion = read_extractor()
 
-#print(list(extracted_re_with_cohesion.values()) )
-
-# Filter to keep RE which cohesions are bigger than 0.05
-extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.3 } 
+# Filter to keep RE which cohesions are bigger than 0.05                          # if this value is too high, the part of len(docs_re[doc] > 10 it will not be verified for any of the docs)
+extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.4 } 
 
 extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold ])     
 
@@ -162,22 +160,170 @@ print("Explicit keywords found in %s seconds\n" % (time.time() - start_time))
  
 # Calculate correlation for finding implicit keywords (semantic proximity)
 
-print("Calculating correlations...") 
+print("Calculating correlations and intra-proximity...") 
 
 corr = dict()
 
+ip = dict()
+
+occurences_A = dict()
+occurences_B = dict()
 
 for n_doc_A in chosen_docs: # only RE present in the 5 documents
     for a in top_tf_idf[n_doc_A]:
+
         for n_doc_B in docs_re:
-            
+
             if n_doc_A == n_doc_B: # it means we are comparing RE in the same document, we only want RE from other documents.
                 continue
             
             for b in docs_re[n_doc_B]:
                 
-                # podemos ir ao n_grams_doc, e fazer um intersect dos sets de ambas
-                if n_grams_doc[a] & n_grams_doc[b]:
+                if a == b:
+                    continue
+                
+                # intersecting both sets, if we don't get an empty set, both explicit keyword and re appear in at least a document
+                if n_grams_doc[a] & n_grams_doc[b]:   
+
+                    
+                    if (n_doc_A in n_grams_doc[a] & n_grams_doc[b]):   # if the re from other document (n_grams_doc[b]) is also in this document (n_doc_A) it cannot be implicit keyword of this document
+                        #aux_ip_a_b += 0 # we don't even need to store this value because the corr will also be 0, so just continue
+                        continue  
+                    
+                   # speaking it is the are west appeasrs in all top scores since it is a re of file 8, not one of the chosen docs (it would have index 7)
+                    
+                    docs_both_size = len(n_grams_doc[a] & n_grams_doc[b])
+                    
+                    ip_a_b = 1 - (1/ docs_both_size)
+                    
+                    aux_ip_a_b = 0
+                      
+
+                    # Intra-document Proximity (IP)
+                        
+                    for docs_both in n_grams_doc[a] & n_grams_doc[b]:
+                           
+                        if docs_both_size == 1:   # since ip_a_b = 1 - (1/ docs_both_size) *  np.sum(dist/farthest), if docs_both_size == 1, ip_a_b = 0    
+                            break
+                        
+                        freq_A = n_grams_freq_corpus_doc[docs_both][a]
+                        freq_B = n_grams_freq_corpus_doc[docs_both][b]
+                        size_doc = docs_size[docs_both]
+                        
+                        # calculating farthest
+                        
+                        c1 = freq_A * (size_doc - freq_B)
+                        c2 = ( (freq_A - 1) ** 2  + freq_A - 1) / 2
+                        c3 = freq_B * (size_doc - freq_A)
+                        c4 = ( (freq_B - 1) ** 2  + freq_B - 1) / 2
+                        
+                        farthest = c1 - c2 + c3 - c4
+                        
+                        # calculating dist
+                        
+                        get_doc_words = docs_text[docs_both]
+                        
+                        # a
+                        
+                        n_occurences_A_found = 0
+                        counter_value_A = 0
+                        
+                        first_index_occurence_A = 0
+                        last_index_occurence_A = 0
+                        
+                        occurences_A = {}
+        
+                        # b
+                
+                        n_occurences_B_found = 0
+                        counter_value_B = 0
+                        
+                        first_index_occurence_B = 0
+                        last_index_occurence_B = 0
+                        occurences_B = {}
+                        
+                        dist = 0
+                        
+
+                        for n_doc_words in range(0, len(get_doc_words)):
+      
+                        
+                            if(n_occurences_A_found == freq_A and n_occurences_B_found == freq_B):
+                                 break   
+                        
+                            
+                            if(counter_value_A == 0 and a[counter_value_A] == get_doc_words[n_doc_words]):
+                                first_index_occurence_A = n_doc_words
+                                
+                            if(counter_value_B == 0 and b[counter_value_B] == get_doc_words[n_doc_words]):
+                                first_index_occurence_B = n_doc_words    
+                                
+                            
+                            # a
+                            
+                            if(a[counter_value_A] == get_doc_words[n_doc_words]): # 1587 of doc 6 is where reduction starts
+                                if(counter_value_A == len(a) - 1 and a[counter_value_A] == get_doc_words[n_doc_words]):
+                                    last_index_occurence_A = n_doc_words
+                                    n_occurences_A_found += 1
+                                    occurences_A.update({n_occurences_A_found : (first_index_occurence_A, last_index_occurence_A)})
+                                    #last_index_occurence_A = 0
+                                    counter_value_A = 0
+                 
+                                else:
+                                    counter_value_A += 1
+                                   
+                            else:
+                                counter_value_A = 0
+                                #first_index_occurence_A = 0
+                    
+      
+                            # b
+                        
+                            if(b[counter_value_B] == get_doc_words[n_doc_words]): # 1587 of doc 6 is where reduction starts
+                                if(counter_value_B == len(b) - 1 and b[counter_value_B] == get_doc_words[n_doc_words]):
+                                    last_index_occurence_B = n_doc_words
+                                    n_occurences_B_found += 1
+                                    occurences_B.update({n_occurences_B_found : (first_index_occurence_B, last_index_occurence_B)})
+                                   # last_index_occurence_B = 0
+                                    counter_value_B = 0
+                                
+                                else:   
+                                    counter_value_B += 1
+                                   
+                            else:
+                                counter_value_B = 0
+                               # first_index_occurence_B = 0
+                    
+                            
+                        for n_occurence_A in occurences_A:
+                            dist_min = math.inf
+                            for n_occurence_B in occurences_B:
+                                if(occurences_B[n_occurence_B][1] > occurences_A[n_occurence_A][1]):
+                                    aux_dist = abs(occurences_A[n_occurence_A][1]- occurences_B[n_occurence_B][0] - 1)
+                                    
+                                if(occurences_A[n_occurence_A][1] > occurences_B[n_occurence_B][1]):
+                                    aux_dist = abs(occurences_B[n_occurence_B][1]- occurences_A[n_occurence_A][0] - 1) # if dist = 0, means an n_gram immediately follows the other
+                                
+                                if(aux_dist < 0):
+                                    aux_dist = 0
+                                        
+                                if(aux_dist < dist_min):
+                                    dist_min = aux_dist
+                             
+                            dist += dist_min
+                 
+                             
+                        dist *= 2 # because distance of A to B is the same as distance of B to A   
+                
+                        aux_ip_a_b += dist / farthest  
+                    
+                    
+                    ip_a_b *= aux_ip_a_b
+                    
+                    ip[(b, a)] = ip_a_b
+                    
+                    
+                    # Inter-document proximity (correlation)
                     
                     cov_a_b = 1 / (n_documents - 1)
                     cov_a_a = 1 / (n_documents - 1)
@@ -201,26 +347,28 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
                       
                     corr[(b, a)] = corr_a_b
 
-print("Calculated correlatsons in %s seconds\n" % (time.time() - start_time)) 
-
-# Intra-document Proximity (IP)
+print("Calculated correlations and intra-proximity in %s seconds\n" % (time.time() - start_time)) 
 
 
 print("Calculating implicit keywords...") 
+
 # Scores
 scores = dict()
 top_scores = dict()
 
 for doc in chosen_docs:
-    # Correlacao no mm doc da 0
+    # corr and ip values of an explicit keyword and of a re that are in the same doc is 0
     scores[doc] = dict()
     
     for relevant_expression in extracted_re:
         score = 0
-        for i, explicit_keyword in enumerate(top_tf_idf[doc]):
+        if docs_re[doc].get(relevant_expression): # if we have equal top scores, ex: 5th top score is from a expression outside and one inside (it can be from one inside if all scores is 0 as a case we tested)
+            continue
+        
+        for i, explicit_keyword in enumerate(top_tf_idf[doc]):        
             
-            if corr.get((relevant_expression, explicit_keyword)):
-                score += corr[(relevant_expression, explicit_keyword)] / (i+1)
+            if corr.get((relevant_expression, explicit_keyword)) and ip.get((relevant_expression, explicit_keyword)):
+                score += (corr[(relevant_expression, explicit_keyword)] * math.sqrt(ip[(relevant_expression, explicit_keyword)])) / (i+1)
             
         scores[doc][relevant_expression] = score
         
