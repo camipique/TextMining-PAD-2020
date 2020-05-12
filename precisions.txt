@@ -1,7 +1,7 @@
 corpus2mw:
 
-glue = 88/200
-dice = 69/200
-mi = 63/200
-phi = 72/200
-loglike = 44/200
+glue = 103/200
+dice = 93/200
+mi = 81/200
+phi = 97/200
+loglike = 71/200
