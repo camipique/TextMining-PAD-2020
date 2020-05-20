@@ -8,7 +8,7 @@ Created on Wed May 20 16:15:05 2020
 """
 import os, json
 
-CORPUS = ["corpus4mw"]
+CORPUS = ["corpus2mw", "corpus4mw"]
 COHESION_MEASURES = ["glue", "dice", "mi", "phi", "log_like"]
 
 # Change manually
@@ -38,14 +38,14 @@ def read_extractor(corpus, cohesion):
 
 for corpus in CORPUS:
     
-    print("\n\t\t\t--- {} ---\t\t\t\n".format(corpus))
+    print("\n\t\t\t------------------------------ {} ------------------------------\t\t\t\n".format(corpus))
 
     for cohesion in COHESION_MEASURES:
         print("{}:\n".format(cohesion))
         extracted_re_with_cohesion = read_extractor(corpus, cohesion)
         count = 0
         
-        with open('{}-re-hand'.format(corpus)) as f:
+        with open('extracted-re-hand'.format(corpus)) as f:
             line = f.readline()
             
             while line:        
