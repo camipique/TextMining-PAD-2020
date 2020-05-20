@@ -1,3 +1,5 @@
+PRECISIONS
+
 corpus2mw:
 
 glue = 103/200
@@ -5,3 +7,27 @@ dice = 93/200
 mi = 81/200
 phi = 97/200
 loglike = 71/200
+
+corpus4mw:
+
+glue = 89/200
+dice = 64/200
+mi = 62/200
+phi = 85/200
+loglike = 50/200
+
+RECALLS
+
+glue = /200
+dice = /200
+mi = /200
+phi = /200
+loglike = /200
+
+corpus4mw:
+
+glue = 35/200
+dice = 47/200
+mi = 28/200
+phi = 35/200
+loglike = 46/200

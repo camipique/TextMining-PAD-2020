@@ -140,7 +140,6 @@ def read_corpus():
     
     text_split_str = ""                
     text_split_list = []
-    
 
     # with - execute the operations as pairs
     for file_name in sorted(os.listdir(CORPUS_FOLDER_PATH), key = len):  
