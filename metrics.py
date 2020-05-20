@@ -37,9 +37,11 @@ def read_extractor(corpus, cohesion):
     return extracted_re
 
 for corpus in CORPUS:
+    
+    print("\n\t\t\t--- {} ---\t\t\t\n".format(corpus))
 
     for cohesion in COHESION_MEASURES:
-        
+        print("{}:\n".format(cohesion))
         extracted_re_with_cohesion = read_extractor(corpus, cohesion)
         count = 0
         
@@ -57,6 +59,6 @@ for corpus in CORPUS:
         recall = count/200
         f1_score = 2 * precision * recall / (precision + recall)
     
-        print("Precision for {} with {} as cohesion measure is {}".format(corpus, cohesion, precision))
-        print("Recall for {} with {} as cohesion measure is {}".format(corpus, cohesion, recall))
-        print("F1 score for {} with {} as cohesion measure is {}\n".format(corpus, cohesion, round(f1_score, 4)))
+        print("\t\tPrecision = {}".format(precision))
+        print("\t\tRecall = {}".format(recall))
+        print("\t\tF1 score = {}\n".format(round(f1_score, 4)))
