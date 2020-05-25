@@ -1,2 +1,0 @@
-59	Cthulhu_Chronicles
-Cthulhu Chronicles &&&&& Introduction &&&&& &&&&& &&&&& A screenshot from ''Cthulhu Chronicles'' &&&&& ''Cthulhu Chronicles'' is a mobile interactive fiction game, based on the Chaosium tabletop game ''Call of Cthulhu''. &&&&& &&&&& The game and the first 5 modules were released for iOS in July 2018. &&&&& &&&&& Mobile phone users choose an investigator and create their own path through interactive adventures on their mobile device. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& 

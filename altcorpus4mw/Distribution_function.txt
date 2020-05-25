@@ -1,2 +1,0 @@
-47	Distribution_function
-Distribution function &&&&& Introduction &&&&& '''Distribution function''' may refer to &&&&& *Cumulative distribution function, a basic concept of probability theory &&&&& *Distribution function (physics), a function giving the number of particles per unit volume in single-particle phase space &&&&& *Distribution function (measure theory), a generalization of the probability theoretical concept &&&&& &&&&& &&&&& 

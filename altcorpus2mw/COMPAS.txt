@@ -1,2 +1,0 @@
-63	COMPAS
-COMPAS &&&&& Introduction &&&&& '''COMPAS''' can refer to: &&&&& &&&&& * COMPAS (company), a Canadian polling company &&&&& * COMPAS (software), a case management and decision support tool developed by Northpointe (now equivant) used by US courts to assess the likelihood of a defendant becoming a recidivist &&&&& * Compas Pascal, an implementation of the Pascal programming language written by Anders Hejlsberg &&&&& * Centre on Migration Policy and Society, University of Oxford &&&&& &&&&& &&&&& 

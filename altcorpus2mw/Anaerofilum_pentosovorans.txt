@@ -1,2 +1,0 @@
-34	Anaerofilum_pentosovorans
-Anaerofilum pentosovorans &&&&& Introduction &&&&& &&&&& &&&&& '''''Anaerofilum pentosovorans''''' is a Gram-positive strictly anaerobic, mesophilic and acidogenic bacterium from the genus ''Anaerofilum'' which has been isolated from sludge from a bioreactor from Frankfurt in Germany. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

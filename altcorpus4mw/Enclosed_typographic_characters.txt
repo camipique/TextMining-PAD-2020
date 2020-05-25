@@ -1,2 +1,0 @@
-46	Enclosed_typographic_characters
-Enclosed typographic characters &&&&& Introduction &&&&& '''Enclosed typographic characters''' may refer to: &&&&& &&&&& ;Unicode blocks &&&&& * Enclosed Alphanumerics &&&&& * Enclosed Alphanumeric Supplement &&&&& * Enclosed CJK Letters and Months &&&&& * Enclosed Ideographic Supplement &&&&& &&&&& ;Characters &&&&& * Enclosed A &&&&& * Enclosed C &&&&& * Enclosed R &&&&& * Enclosed T &&&&& &&&&& &&&&& &&&&& See also &&&&& * Circle-k (disambiguation) &&&&& * Circle-c (disambiguation) &&&&& * Circled-a (disambiguation) &&&&& 

@@ -16,7 +16,7 @@ from nltk.util import everygrams
 
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "test/"
+CORPUS_FOLDER_PATH = "corpusTest/"
 COHESION_MEASURE = "glue" # change here to use a different cohesion measure
 
 

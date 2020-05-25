@@ -1,2 +1,0 @@
-43	Loeschian_number
-Loeschian number &&&&& Introduction &&&&& &&&&& &&&&& In number theory, the numbers of the form ''x''2 + ''xy'' + ''y''2 (for integer ''x'', ''y'') are called the &&&&& '''Loeschian numbers'''. These numbers are named after August Lösch. They are the norms of the Eisenstein integers. &&&&& &&&&& References &&&&& * &&&&& * &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

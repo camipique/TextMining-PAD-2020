@@ -1,2 +1,0 @@
-58	AGTPBP1_(gene)
-AGTPBP1 (gene) &&&&& Introduction &&&&& &&&&& &&&&& '''ATP/GTP binding protein 1''' is a protein that in humans is encoded by the AGTPBP1 gene. &&&&& &&&&& &&&&& Function &&&&& &&&&& NNA1 is a zinc carboxypeptidase that contains nuclear localization signals and an ATP/GTP-binding motif that was initially cloned from regenerating spinal cord neurons of the mouse.supplied by OMIM, Jul 2002. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& Further reading &&&&& &&&&& &&&&& * &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

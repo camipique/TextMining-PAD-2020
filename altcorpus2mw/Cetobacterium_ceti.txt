@@ -1,2 +1,0 @@
-61	Cetobacterium_ceti
-Cetobacterium ceti &&&&& Introduction &&&&& &&&&& &&&&& &&&&& '''''Cetobacterium ceti''''' is a Gram-negative, and rod-shaped obligately anaerobic bacterium from the genus of ''Cetobacterium'' which has been isolated from sea mammals. Cetobacterium ceti represents a hitherto unknown line of descent peripherally associated to the fusobacteria and low G + C relatives.There is no growth of Cetobacterium ceti at 25°C or 45°C. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

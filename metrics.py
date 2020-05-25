@@ -11,7 +11,7 @@ import os, json
 CORPUS = ["corpus2mw", "corpus4mw"]
 COHESION_MEASURES = ["glue", "dice", "mi", "phi", "log_like"]
 
-# Change manually
+# Change manually ( how many of the 200 random selected REs we considered as real REs)
 precisions = {
     'corpus2mw': {
         'glue': 103/200,

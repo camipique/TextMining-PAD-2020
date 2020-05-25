@@ -1,0 +1,90 @@
+--- Document number 0 ---
+
+SINGLE words:
+
+instruments
+anatomy
+Agathocles
+Archimandrite
+Southeast
+
+MULTI words:
+
+Indic scripts
+hydrogen ion
+crime rate
+Bosnia and Herzegovina
+adverse events
+
+--- Document number 2 ---
+
+SINGLE words:
+
+Borealis
+universe
+casuistry
+magnitude
+coalition
+
+MULTI words:
+
+Coronae Borealis
+escapement mechanism
+Czech Republic
+deposits of graphite
+Odyssey Arena
+
+--- Document number 4 ---
+
+SINGLE words:
+
+semiconductor
+diodes
+dictionaries
+encyclopedia
+Biogeography
+
+MULTI words:
+
+encyclopedia articles
+Historical Society
+dictionary entries
+Canary Wharf
+floating point operations
+
+--- Document number 6 ---
+
+SINGLE words:
+
+Parliament
+second-most-often-translated
+Halloween
+sequence
+transcendental
+
+MULTI words:
+
+kinetic energy of the mass
+Euler integral
+reduction in tariffs
+layout engine
+wide range
+
+--- Document number 7 ---
+
+SINGLE words:
+
+intercalary
+Hancock
+McKellen
+appeared
+Hutchinson
+
+MULTI words:
+
+Grand Master
+extended format
+Holyland Tower
+Los Patricios
+Anthony Quinn
+

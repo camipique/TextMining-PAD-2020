@@ -1,2 +1,0 @@
-67	Bathocuproine
-Bathocuproine &&&&& Introduction &&&&& &&&&& '''Bathocuproine''' is a derivative of 1,10-phenanthroline with two methyl groups and two phenyl groups in the 4,7 and 2,9 positions, respectively. Like 1,10-phenanthroline, bathocuproine is a bidentate chelating ligand. The two methyl groups flank the nitrogen centers, such that bathocuproine is a bulky ligand. It is a pale yellow solid that is soluble in polar organic solvents. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& 

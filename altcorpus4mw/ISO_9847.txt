@@ -1,2 +1,0 @@
-32	ISO_9847
-ISO 9847 &&&&& Introduction &&&&& &&&&& &&&&& Typical pyranometer, model SR20. &&&&& '''ISO 9847''', ''Solar energy -- Calibration of field pyranometers by comparison to a reference pyranometer,'' is an ISO standard for the calibration of pyranometers. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

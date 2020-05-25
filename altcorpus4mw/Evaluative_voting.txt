@@ -1,2 +1,0 @@
-58	Evaluative_voting
-Evaluative voting &&&&& Introduction &&&&& '''Evaluative voting''' is a term used to describe cardinal voting methods. It can mean: &&&&& &&&&& * A synonym of Score voting, with scales like (0, 1), (-1, 0, 1), (0, 1, 2), and (0, 1, ..., 20). &&&&& * A specific variation called Combined approval voting, with a 3-valued Support/Oppose/Neutral scale (as named by Claude Hillinger) &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

@@ -1,2 +1,0 @@
-38	Lysobacter_agri
-Lysobacter agri &&&&& Introduction &&&&& &&&&& &&&&& &&&&& '''''Lysobacter agri''''' is a Gram-positive, rod-shaped, aerobic and motile bacterium from the genus of ''Lysobacter'' which has been isolated from soil from a field of the Kyung Hee University in Korea. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

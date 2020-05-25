@@ -1,2 +1,0 @@
-53	CD300LB_(gene)
-CD300LB (gene) &&&&& Introduction &&&&& &&&&& &&&&& '''CD300 molecule like family member b''' is a protein that in humans is encoded by the CD300LB gene. &&&&& &&&&& &&&&& Function &&&&& &&&&& CD300LB is a nonclassical activating receptor of the immunoglobulin (Ig) superfamily expressed on myeloid cells (Martinez-Barriocanal and Sayos, 2006 PubMed 16920917).supplied by OMIM, Mar 2008. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& Further reading &&&&& &&&&& &&&&& * &&&&& * &&&&& * &&&&& * &&&&& * &&&&& * &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

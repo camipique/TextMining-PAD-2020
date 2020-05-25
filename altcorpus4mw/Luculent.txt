@@ -1,2 +1,0 @@
-35	Luculent
-Luculent &&&&& Introduction &&&&& '''Luculent''' is an open-source (OFL-licensed) monospace font developed by Andrew Kensler. The font has been fully hand-hinted. Its homepage is http://eastfarthing.com/luculent/.  &&&&& &&&&& External links &&&&& * Luculent Programming Fonts &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 

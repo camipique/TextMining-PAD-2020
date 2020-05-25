@@ -1,2 +1,0 @@
-39	ISO_9060
-ISO 9060 &&&&& Introduction &&&&& Typical ISO 9060 secondary standard pyranometer, model SR30. &&&&& &&&&& '''ISO 9060''', ''Specification and classification of instruments for measuring hemispherical solar and direct solar radiation'', is an ISO standard for the classification of pyranometers and pyrheliometers. &&&&& &&&&& References &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& &&&&& 
