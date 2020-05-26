@@ -20,9 +20,9 @@ from nltk.util import everygrams, ngrams
 start_time = time.time()
 
 CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
-COHESION_MEASURE = "mi" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
+COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
 WEIGTH = "mean_length" # mean_length, median_length, mean_syllables or median_syllables
-THRESHOLD = -17 # -17 for mi and 0.4 for the others measures
+THRESHOLD = 0.4 # -17 # -17 for mi and 0.4 for the others measures
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
@@ -243,7 +243,7 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
                     
                     docs_both_size = len(n_grams_doc[a] & n_grams_doc[b])
                     
-                    ip_a_b = 1 - (1/ docs_both_size)
+                    ip_a_b = 1 
                     
                     aux_ip_a_b = 0
                       
@@ -251,9 +251,6 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
                     # Intra-document Proximity (IP)
                         
                     for docs_both in n_grams_doc[a] & n_grams_doc[b]:
-                           
-                        if docs_both_size == 1:   # since ip_a_b = 1 - (1/ docs_both_size) *  np.sum(dist/farthest), if docs_both_size == 1, ip_a_b = 0    
-                            break
                         
                         freq_A = n_grams_freq_corpus_doc[docs_both][a]
                         freq_B = n_grams_freq_corpus_doc[docs_both][b]
@@ -362,9 +359,13 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
                 
                         aux_ip_a_b += dist / farthest  
                     
+                    aux_ip_a_b *= (1/ docs_both_size)
                     
-                    ip_a_b *= aux_ip_a_b
-            
+                    ip_a_b -= aux_ip_a_b
+                    
+                    if ip_a_b < 0:
+                        continue
+                    
                     ip[(b, a)] = ip_a_b  #(b,a) is the same as (a,b) but just to put it in the right shape for the scores calculation
                     
                     
