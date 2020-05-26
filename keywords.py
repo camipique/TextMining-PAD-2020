@@ -22,6 +22,7 @@ start_time = time.time()
 CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
 COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
 WEIGTH = "median_syllables" # mean_length, median_length, mean_syllables or median_syllables
+THRESHOLD = 0.4
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
@@ -125,7 +126,7 @@ extracted_re_with_cohesion = read_extractor()
 # Filter to keep RE which cohesions are bigger than 0.4, if this value is too high, the part of len(docs_re[doc]) > 10 it will not be verified for any of the docs
 if COHESION_MEASURE != "mi" or COHESION_MEASURE != 'log_like': # these measures range is ]-oo, +oo[
     # To try with different approaches, substitute with statitics.mean of sylabble_count, or  statistics.mean/statistics.median of len(term) to experiment with the average length of relevant expressions, use the same as the WEIGHT criteria
-    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > 0.4 } 
+    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > THRESHOLD } 
 else:
      # To try with different approaches, substitute with statitics.mean of sylabble_count, or  statistics.mean/statistics.median of len(term) to experiment with the average length of relevant expressions
     extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > -17 }
@@ -146,12 +147,12 @@ chosen_docs = set()
 
 for doc in docs_re:
     
-    threshold = 10 # choose only documents with more than 10 relevant expressions
+    min_re = 10 # choose only documents with more than 10 relevant expressions
     
     if COHESION_MEASURE == "mi" or COHESION_MEASURE == 'log_like':
-        threshold = 7
+        min_re = 7
     
-    if len(docs_re[doc]) > threshold:
+    if len(docs_re[doc]) > min_re:
         chosen_docs.add(doc)
         tf_idf[doc] = dict()
         tf_idf_terms[doc] = dict()
