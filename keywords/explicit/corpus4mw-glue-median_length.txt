@@ -1,5 +1,15 @@
 --- Document number 78 ---
 
+SINGLE words:
+
+Guardians
+Lantern
+Volthoom
+unpardonable
+universe
+
+MULTI words:
+
 Xipe Totec
 racial makeup
 someone living alone
@@ -7,6 +17,16 @@ GG Allin
 housing units at an average density
 
 --- Document number 79 ---
+
+SINGLE words:
+
+county
+households
+LiveJournal
+population
+average
+
+MULTI words:
 
 housing units at an average density
 racial makeup
@@ -16,13 +36,33 @@ units at an average density
 
 --- Document number 81 ---
 
-Hispanic or Latino
+SINGLE words:
+
+county
+income
+median
+Cannonball
+households
+
+MULTI words:
+
 racial makeup
+Hispanic or Latino
 Males had a median
 someone living alone
 housing units at an average density
 
 --- Document number 88 ---
+
+SINGLE words:
+
+Eielson
+Guangzhou-Shenzhen-Hong
+Sargent
+households
+Impressionist
+
+MULTI words:
 
 someone living alone
 householder with no husband
@@ -31,6 +71,16 @@ someone living alone who was 65
 Hong Kong
 
 --- Document number 57 ---
+
+SINGLE words:
+
+homophones
+processing
+Pharmacia
+Daphnia
+Amersham
+
+MULTI words:
 
 Dashing Bondhu
 Deng Xiaoping

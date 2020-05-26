@@ -19,7 +19,7 @@ from nltk.util import everygrams, ngrams
 # Returns the actual time of the system in seconds
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
+CORPUS_FOLDER_PATH = "corpus4mw/" # Change corpus to extract keywords from that corpus
 COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
 WEIGTH = "median_syllables" # mean_length, median_length, mean_syllables or median_syllables
 THRESHOLD = 0.4
@@ -177,8 +177,8 @@ for doc in chosen_docs:
         elif WEIGTH == "median_syllables":
             weigth = statistics.median(get_syllables(relevant_expression)) 
         else:
-            print("WEIGTH = {} is not defined, choose between [mean | median | syllables]".format(WEIGTH))
-            print("Using median as default\n")
+            print("WEIGTH = {} is not defined, choose between [mean_length | median_length | mean_syllables | median_syllables]".format(WEIGTH))
+            print("Using median_length as default\n")
             weigth = statistics.median([len(term) for term in relevant_expression])
         
         tf_idf[doc][relevant_expression] = n_grams_freq_corpus_doc[doc][relevant_expression] / docs_size[doc] * math.log(n_documents /  len( n_grams_doc[relevant_expression])) * weigth  
