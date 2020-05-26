@@ -9,7 +9,7 @@ PAD Project - Text Mining
 # Part II a) - Automatic Extraction of Explicit and Implicit Keywords
 
 # Re for regular expression matching operations, os for using operating system dependent functionality, math for mathematic operations, time to measure program's execution time, json to receive json file to input data in json format for keywords extraction phase
-# Heapq to see n_grams with the highest tf_idf, statistics for the mean and median function
+# Heapq to see n_grams with the highest tf_idf, statistics for the mean and median function, numpy for data management
 import re, os, math, time, json, heapq, statistics, numpy as np
 
 # Nltk to work with human language data (frequency of words and n_grams in a text, ngrams function used for the single keywords)
