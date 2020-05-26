@@ -20,9 +20,9 @@ from nltk.util import everygrams, ngrams
 start_time = time.time()
 
 CORPUS_FOLDER_PATH = "corpus4mw/" # Change corpus to extract keywords from that corpus
-COHESION_MEASURE = "mi" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
-WEIGTH = "mean_length" # mean_length, median_length, mean_syllables or median_syllables
-THRESHOLD = -23 # -19 for mi and 0.4 for the others measures
+COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
+WEIGTH = "mean_syllables" # mean_length, median_length, mean_syllables or median_syllables
+THRESHOLD = 0.4 # -23 for mi and 0.4 for the others measures
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
