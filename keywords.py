@@ -19,10 +19,10 @@ from nltk.util import everygrams, ngrams
 # Returns the actual time of the system in seconds
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpus4mw/" # Change corpus to extract keywords from that corpus
-COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
-WEIGTH = "median_syllables" # mean_length, median_length, mean_syllables or median_syllables
-THRESHOLD = 0.4
+CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
+COHESION_MEASURE = "mi" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
+WEIGTH = "mean_length" # mean_length, median_length, mean_syllables or median_syllables
+THRESHOLD = -17 # -17 for mi and 0.4 for the others measures
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
@@ -129,7 +129,7 @@ if COHESION_MEASURE != "mi" or COHESION_MEASURE != 'log_like': # these measures 
     extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > THRESHOLD } 
 else:
      # To try with different approaches, substitute with statitics.mean of sylabble_count, or  statistics.mean/statistics.median of len(term) to experiment with the average length of relevant expressions
-    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > -17 }
+    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > THRESHOLD }
 
 extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold])     
 
