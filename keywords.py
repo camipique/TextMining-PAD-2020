@@ -19,10 +19,10 @@ from nltk.util import everygrams, ngrams
 # Returns the actual time of the system in seconds
 start_time = time.time()
 
-CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
-COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
+CORPUS_FOLDER_PATH = "corpus4mw/" # Change corpus to extract keywords from that corpus
+COHESION_MEASURE = "mi" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
 WEIGTH = "mean_length" # mean_length, median_length, mean_syllables or median_syllables
-THRESHOLD = 0.4 # -17 # -17 for mi and 0.4 for the others measures
+THRESHOLD = -23 # -19 for mi and 0.4 for the others measures
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
@@ -150,7 +150,7 @@ for doc in docs_re:
     min_re = 10 # choose only documents with more than 10 relevant expressions
     
     if COHESION_MEASURE == "mi" or COHESION_MEASURE == 'log_like':
-        min_re = 7
+        min_re = 25
     
     if len(docs_re[doc]) > min_re:
         chosen_docs.add(doc)
@@ -361,13 +361,9 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
                     
                     aux_ip_a_b *= (1/ docs_both_size)
                     
-                    ip_a_b -= aux_ip_a_b
+                    ip_a_b -= aux_ip_a_b                    
                     
-                    if ip_a_b < 0:
-                        continue
-                    
-                    ip[(b, a)] = ip_a_b  #(b,a) is the same as (a,b) but just to put it in the right shape for the scores calculation
-                    
+                    ip[(b, a)] = abs(ip_a_b)  #(b,a) is the same as (a,b) but just to put it in the right shape for the scores calculation
                     
                     # Inter-document proximity (correlation)
                     
