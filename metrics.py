@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed May 20 16:15:05 2020
+PAD Project - Text Mining
 
-@author: 
-    Carlos Quendera 49946
-    David Pais 50220
+@author: Carlos Quendera 49946
+@author: David Pais 50220
 """
+
+# Evaluation metrics used to classify the relevant expressions extracted from a corpus by the extractor.py 
+
+# Os for using operating system dependent functionality, json to receive json file to input data in json format from the relevant expressions json file output of extractor.py
 import os, json
 
 CORPUS = ["corpus2mw", "corpus4mw"]
 COHESION_MEASURES = ["glue", "dice", "mi", "phi", "log_like"]
 
-# Change manually ( how many of the 200 random selected REs we considered as real REs)
+# Inserted manually (how many of the 200 random selected REs we considered as real REs)
 precisions = {
     'corpus2mw': {
         'glue': 103/200,
@@ -29,6 +32,7 @@ precisions = {
         }
     }
 
+# Read extracted relevant expressions of a corpus with a cohesion measure
 def read_extractor(corpus, cohesion):
     
     with open(os.path.join("tested-mwus", "{}-{}-mwu.txt".format(corpus, cohesion)), "r", encoding="utf-8") as file:
@@ -36,7 +40,8 @@ def read_extractor(corpus, cohesion):
         
     return extracted_re
 
-for corpus in CORPUS:
+# Main method
+for corpus in CORPUS: # For each of the corpus (corpus2mw and corpus 4mw)
     
     print("\n\t\t\t------------------------------ {} ------------------------------\t\t\t\n".format(corpus))
 
@@ -45,7 +50,7 @@ for corpus in CORPUS:
         extracted_re_with_cohesion = read_extractor(corpus, cohesion)
         count = 0
         
-        with open('extracted-re-hand.txt') as f:
+        with open('extracted-re-hand.txt') as f: # Calculate automatically the recall by checking if the extracted relevant expressions by hand are in the extracted relevant expressions by the extractor.py
             line = f.readline()
             
             while line:        
@@ -55,7 +60,7 @@ for corpus in CORPUS:
                     
                 line = f.readline()
                 
-        precision = precisions[corpus][cohesion]
+        precision = precisions[corpus][cohesion] # already previously manually calculated above
         recall = count/200
         f1_score = 2 * precision * recall / (precision + recall)
     
