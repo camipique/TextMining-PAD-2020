@@ -124,7 +124,7 @@ extracted_re_with_cohesion = read_extractor()
 
 # Filter to keep RE which cohesions are bigger than 0.4, if this value is too high, the part of len(docs_re[doc]) > 10 it will not be verified for any of the docs
 if COHESION_MEASURE != "mi" or COHESION_MEASURE != 'log_like': # these measures range is ]-oo, +oo[
-    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > 0.4 } 
+    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > 0.4 } 
 else:
     extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > -17 }
 

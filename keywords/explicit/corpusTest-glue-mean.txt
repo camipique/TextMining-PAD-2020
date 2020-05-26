@@ -31,8 +31,8 @@ MULTI words:
 Coronae Borealis
 escapement mechanism
 Czech Republic
-deposits of graphite
 Odyssey Arena
+deposits of graphite
 
 --- Document number 4 ---
 
@@ -66,8 +66,8 @@ MULTI words:
 
 kinetic energy of the mass
 Euler integral
-reduction in tariffs
 layout engine
+reduction in tariffs
 wide range
 
 --- Document number 7 ---
@@ -85,6 +85,6 @@ MULTI words:
 Grand Master
 extended format
 Holyland Tower
+steppe nomads
 Los Patricios
-Anthony Quinn
 
