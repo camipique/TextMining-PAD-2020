@@ -8,9 +8,9 @@ PAD Project - Text Mining
 
 # Part II a) - Automatic Extraction of Explicit and Implicit Keywords
 
-#Re for regular expression matching operations, os for using operating system dependent functionality, math for mathematic operations, time to measure program's execution time, json to receive json file to input data in json format for keywords extraction phase
-#Heapq to see n_grams with the highest tf_idf, statistics for the mean and median function
-import re, os, math, time, json, heapq, statistics
+# Re for regular expression matching operations, os for using operating system dependent functionality, math for mathematic operations, time to measure program's execution time, json to receive json file to input data in json format for keywords extraction phase
+# Heapq to see n_grams with the highest tf_idf, statistics for the mean and median function
+import re, os, math, time, json, heapq, statistics, numpy as np
 
 # Nltk to work with human language data (frequency of words and n_grams in a text, ngrams function used for the single keywords)
 from nltk import FreqDist
@@ -21,7 +21,7 @@ start_time = time.time()
 
 CORPUS_FOLDER_PATH = "corpusTest/" # Change corpus to extract keywords from that corpus
 COHESION_MEASURE = "glue" # Same coehesion measure of the RE extracted using the extractor.py to get the keywords using that measure, or load a existent measure file of RE extracted
-WEIGTH = "mean" # mean, median or syllables
+WEIGTH = "median_syllables" # mean_length, median_length, mean_syllables or median_syllables
 
 # Read the full corpus to do the inter-document proximity and intra-document proximity 
 def read_corpus():
@@ -81,7 +81,7 @@ def read_extractor():
 # Find to each documents a relevant expression belongs to
 def find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re):
         
-    average_prob = dict() # to calculate inter-document proximity p(A,.) average probability of A in every document of the corpus
+    average_prob = dict() # to store inter-document proximity p(A,.) average probability of A in every document of the corpus
     
     for corpus_re in extracted_re: # for each relevant extracted using the extractor.py
     
@@ -110,7 +110,7 @@ def syllable_count(word):
     if word[0] in vowels:
         count += 1
     for index in range(1, len(word)):
-        if word[index] in vowels and word[index - 1] not in vowels:
+        if word[index] in vowels and word[index - 1] not in vowels: # two consecutive vowels do not count as a vowel
             count += 1
     if count == 0:
         count += 1
@@ -124,11 +124,13 @@ extracted_re_with_cohesion = read_extractor()
 
 # Filter to keep RE which cohesions are bigger than 0.4, if this value is too high, the part of len(docs_re[doc]) > 10 it will not be verified for any of the docs
 if COHESION_MEASURE != "mi" or COHESION_MEASURE != 'log_like': # these measures range is ]-oo, +oo[
+    # To try with different approaches, substitute with statitics.mean of sylabble_count, or  statistics.mean/statistics.median of len(term) to experiment with the average length of relevant expressions, use the same as the WEIGHT criteria
     extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > 0.4 } 
 else:
-    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v > -17 }
+     # To try with different approaches, substitute with statitics.mean of sylabble_count, or  statistics.mean/statistics.median of len(term) to experiment with the average length of relevant expressions
+    extracted_with_threshold = {k: v for k,v in extracted_re_with_cohesion.items() if v * statistics.median([syllable_count(term) for term in k]) > -17 }
 
-extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold ])     
+extracted_re = list([tuple(re.split(' ')) for re in extracted_with_threshold])     
 
 docs_re, average_prob = find_docs_re(n_grams_doc, extracted_re, n_grams_freq_corpus_doc, docs_re)
 
@@ -159,15 +161,20 @@ for doc in docs_re:
     if len(chosen_docs) == 5: # 5 documents were choosen
         break
     
+# Returns a universal function (ufunc) object, add broadcasting to a python function, faster than applying a for loop or a map    
+get_len = np.frompyfunc(len,1,1)    
+get_syllables = np.frompyfunc(syllable_count, 1 , 1)
+    
 for doc in chosen_docs:
     for relevant_expression in docs_re[doc]:
-        
-        if WEIGTH == "mean":
-            weigth = statistics.mean([len(term) for term in relevant_expression])
-        elif WEIGTH == "median":
-            weigth = statistics.median([len(term) for term in relevant_expression])
-        elif WEIGTH == "syllables":
-            weigth = syllable_count(" ".join(relevant_expression))   
+        if WEIGTH == "mean_length":
+            weigth = statistics.mean(get_len(relevant_expression))
+        elif WEIGTH == "median_length":
+            weigth = statistics.median(get_len(relevant_expression))
+        elif WEIGTH == "mean_syllables":
+            weigth = statistics.mean(get_syllables(relevant_expression))
+        elif WEIGTH == "median_syllables":
+            weigth = statistics.median(get_syllables(relevant_expression)) 
         else:
             print("WEIGTH = {} is not defined, choose between [mean | median | syllables]".format(WEIGTH))
             print("Using median as default\n")
@@ -178,7 +185,7 @@ for doc in chosen_docs:
     freqs = FreqDist(docs_text[doc])
     
     for term in docs_text[doc]:                                                                                             
-        tf_idf_terms[doc][term] = freqs[term] / docs_size[doc] * math.log(n_documents /  len(terms_doc[(term,)])) * len(term) # or number syllables term
+        tf_idf_terms[doc][term] = freqs[term] / docs_size[doc] * math.log(n_documents /  len(terms_doc[(term,)])) * len(term) # or syllable_count(term)
 
     top_tf_idf[doc] = heapq.nlargest(5, tf_idf[doc], key=tf_idf[doc].get) # get relevant expressions with highest tf_idf
     top_tf_idf_terms[doc] = heapq.nlargest(5, tf_idf_terms[doc], key=tf_idf_terms[doc].get) # get single words with highest tf_idf
@@ -230,7 +237,6 @@ for n_doc_A in chosen_docs: # only RE present in the 5 documents
 
                     
                     if (n_doc_A in n_grams_doc[a] & n_grams_doc[b]):   # if the re from other document (n_grams_doc[b]) is also in this document (n_doc_A) it cannot be implicit keyword of this document
-                        #aux_ip_a_b += 0 # we don't even need to store this value because the corr will also be 0, so just continue
                         continue  
         
                     
