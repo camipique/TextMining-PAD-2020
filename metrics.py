@@ -45,7 +45,7 @@ for corpus in CORPUS:
         extracted_re_with_cohesion = read_extractor(corpus, cohesion)
         count = 0
         
-        with open('extracted-re-hand'.format(corpus)) as f:
+        with open('extracted-re-hand.txt') as f:
             line = f.readline()
             
             while line:        
